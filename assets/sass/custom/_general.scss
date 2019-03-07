@@ -1,0 +1,36 @@
+html, body {font-family: "Roboto";}
+
+.more-icon {color: color("grey", "darken-2");}
+
+img.avatar {	
+	width: 3.5rem;
+	height: 3.5rem;
+	border-radius: 50%;
+	border: 1px solid #fff;
+}
+
+img.avatar.small {
+	width: 2.5rem;
+	height: 2.5rem;
+}
+
+.mobile-fab-tip {
+	position: fixed;
+	right: 85px;
+	padding: 0px 0.7rem;
+	text-align: right;
+	background-color: #323232;
+	border-radius: 2px;
+	color: #FFF;
+	width: auto;
+}
+
+input, textarea {caret-color: $primary-color;}
+
+.logo {
+	width: 148px;
+	height: 47px;
+	margin-top: .6rem;
+}
+
+.loading {padding-top: 55%;}

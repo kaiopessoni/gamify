@@ -1,0 +1,26 @@
+.mission-status { 
+	font-size: .8rem;
+	font-weight: 500;
+	text-transform: capitalize;
+}
+.mission-status.ativa { color: color("grey", "darken-2"); }
+.mission-status.completada { color: $primary-color; }
+.mission-status.expirada { color: color("grey", "base"); }
+
+.mission-icon { 
+	font-size: 1.1rem; 
+	color: $primary-color;
+}
+
+.mission-text { 
+	font-size: .8rem;
+	color: color("grey", "darken-3");
+}
+
+.mission-action { 
+	line-height: .8rem;
+	color: $primary-color; 
+}
+
+.mission-action .mission-text { color: $primary-color; }
+.mission-action-icon { font-size: 1.7rem; }
