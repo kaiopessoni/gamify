@@ -210,9 +210,9 @@
 		
 		<!---------- Scripts Imports ---------->
 		<script> var utoken = "<?php echo $_SESSION["gm_utoken"]; ?>"; </script>
-		<script src="assets/js/jquery-3.2.1.min.js"></script>
-		<script src="assets/js/materialize.min.js"></script>
-		<script src="assets/js/main.js?v0.0.4"></script>
+		<script src="/assets/js/jquery-3.2.1.min.js"></script>
+		<script src="/assets/js/materialize.min.js"></script>
+		<script src="/assets/js/main.js?v0.0.4"></script>
 		<script src="/src/controllers/main.js?v0.0.0"></script>
 		<script src="/src/controllers/user.js?v0.0.0"></script>
 		<script src="/src/controllers/mentor.js?v0.0.0"></script>

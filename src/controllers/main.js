@@ -167,8 +167,7 @@ function getGrupos() {
 					
 							if ( tipo == "jogador/moderador" || tipo == "mentor/moderador" ) {
 								
-								settings_participantes += ' <!-- AAAAAAAAAAAAAAAAAAA --> \
-																						<ul id="user-settings-dropdown-'+ grupo.gtoken +'-'+ participante.utoken +'" class="dropdown-content"> \
+								settings_participantes += '<ul id="user-settings-dropdown-'+ grupo.gtoken +'-'+ participante.utoken +'" class="dropdown-content"> \
 																							<li><a>Tornar Moderador</a></li> \
 																							<li><a>Tornar Mentor</a></li> \
 																							<li><a>Tornar Jogador</a></li> \
@@ -312,7 +311,7 @@ function getGrupos() {
 function getMissoes() {
 	
 	$("#missoes-content").hide();
-	$("#missoes-loading").fadeIn();
+	$("#missoes-loading").show();
 	
 	$.ajax({
 		type: "GET",
@@ -518,7 +517,7 @@ function getMissoes() {
 function getRanking() {
 	
 	$("#ranking-content").hide();
-	$("#ranking-loading").fadeIn();
+	$("#ranking-loading").show();
 	
 	$.ajax({
 		type: "GET",
