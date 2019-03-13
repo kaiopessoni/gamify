@@ -28,7 +28,7 @@ function toast(status, message) {
 function getGrupos() {
 	
 	$("#grupos-content").hide();
-	$("#grupos-loading").fadeIn();
+	$("#grupos-loading").show();
 	
 	$.ajax({
 		type: "GET",

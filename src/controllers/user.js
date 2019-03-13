@@ -93,6 +93,7 @@ function editar_perfil() {
 		success: (data) => {
 
 			if ( data.code == "profile_updated" ) {
+        getGrupos();
 				getUsuarioInfo();
 				hidePage("#editar-perfil")
 			}
