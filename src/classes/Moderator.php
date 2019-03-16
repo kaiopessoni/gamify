@@ -46,6 +46,11 @@ class Moderator extends User {
 			$sql = "DELETE FROM ". TABLE_GRUPOS_USUARIOS ." WHERE id_grupo = ? and id_usuario = ?";
 			$stmt = User::$conn->prepare($sql);
 			$stmt->bind_param("ii", $id_grupo, $id_usuario);
+      $stmt->execute();
+      
+			$sql = "DELETE FROM ". TABLE_GRUPOS_USUARIOS ." WHERE id_grupo = ? and id_usuario = ?";
+			$stmt = User::$conn->prepare($sql);
+			$stmt->bind_param("ii", $id_grupo, $id_usuario);
 			$stmt->execute();
 
 		} else throw new Exception( set_error("permission_denied", "Você não é moderador para realizar essa ação!"), 403);
@@ -98,7 +103,7 @@ class Moderator extends User {
 
 		if ( $type == "jogador/moderador" || $type == "mentor/moderador" ) {
 
-			if ( $status != "participando" && $status != "bloqueado" )
+			if ( $status != "participando" && $status != "bloqueado" && $status != "removido" )
 				throw new Exception( set_error("invalid_status", "O status informado é inválido!"), 400);
 
 			$sql = "UPDATE ". TABLE_GRUPOS_USUARIOS ." SET status = ? WHERE id_grupo = ? and id_usuario = ?";

@@ -1,9 +1,9 @@
 <!-- Modal de Confirmação -->
 <div id="modal-confirm" class="modal middle">
 	<div class="modal-content">
-		<p id="confirm-desc" class="fs-11"></p>
+		<p id="confirm-desc" class="fs-11">Tem certeza que deseja realizar esta ação?</p>
 		<div class="row">
-			<div class="col s6 center"><a id="confirm-yes" class="btn-flat waves-effect">Sim</a></div>
+			<div class="col s6 center"><a id="confirm-yes" class="btn-flat waves-effect modal-close">Sim</a></div>
 			<div class="col s6 center"><a class="btn-flat waves-effect modal-close">Não</a></div>
 		</div>
 	</div>

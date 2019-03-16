@@ -90,27 +90,3 @@ function showPage(id) {
 	$("#ranking-content").hide();
 	$("#notificacoes-content").hide();
 }
-
-function confirm(type, uid) {
-	$("#modal-confirm").modal("open");
-	$("#confirm-desc").html(confirm_types[type].descricao);
-}
-
-var confirm_types = {
-	"completar_missao": {
-		"descricao": "Tem certeza que completou esta missão?",
-		"id": 1
-	},
-	"excluir_missao": {
-		"descricao": "Tem certeza que deseja excluir esta missão?",
-		"id": 2
-	},
-	"excluir_grupo": {
-		"descricao": "Tem certeza que deseja excluir este grupo?",
-		"id": 2
-	},
-	"ativar_grupo": {
-		"descricao": "Ativar este grupo?",
-		"id": 2
-	}
-};

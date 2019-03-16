@@ -1,8 +1,26 @@
 /* Variáveis globais
 ==============================*/
 
-var active_group; // Grupo ativo
-var tipo; 				// Tipo do usuário no grupo
+var active_group;     // Grupo ativo
+var tipo; 				    // Tipo do usuário no grupo
+var confirm_action;   // Tipo de ação confirm
+var confirm_data;     // Dados 
+
+
+$(document).ready(() => {
+	
+	if ( window.location.pathname != "/login/" ) {
+		getGrupos();
+		getUsuarioInfo();
+  }
+  
+  // Confirma ação
+  $("#confirm-yes").click(() => {
+    confirm();
+  });
+	
+});
+
 
 
 /* Funções auxiliares
@@ -18,6 +36,23 @@ function loading(action) {
 function toast(status, message) {
 	let color = ( status == "success" ) ? "green" : "red";
 	M.toast({html: "<strong>" + message + "</strong>", classes: color})
+}
+
+function confirm_trigger(action, data) {
+	$("#modal-confirm").modal("open");
+  confirm_action = action;
+  confirm_data = data;
+}
+
+// Excuta a ação confirmada | chamada quando clica em sim (confirm modal)
+function confirm() {
+
+  switch (confirm_action) {
+    case "change-user-type":
+     change_user_type(confirm_data);
+    break;
+  }
+
 }
 
 
@@ -36,8 +71,6 @@ function getGrupos() {
 		data: "action=grupos-usuario",
 		success: (data) => {
 			
-			console.log(data.grupos);
-			
 			$("#grupos-content").html("");
 			
 			if ( data.grupos.length > 0 ) {
@@ -50,7 +83,6 @@ function getGrupos() {
 				var lista_bloqueados = ""; 														// Lista de participantes
 				
 				active_group = data.grupos[0].gtoken;
-				console.log(active_group);
 				$.each(data.grupos, (key, grupo) => {
 				
 					// Acha o tipo do usuário no grupo
@@ -167,13 +199,14 @@ function getGrupos() {
 					
 							if ( tipo == "jogador/moderador" || tipo == "mentor/moderador" ) {
 								
-								settings_participantes += '<ul id="user-settings-dropdown-'+ grupo.gtoken +'-'+ participante.utoken +'" class="dropdown-content"> \
-																							<li><a>Tornar Moderador</a></li> \
-																							<li><a>Tornar Mentor</a></li> \
-																							<li><a>Tornar Jogador</a></li> \
-																							<li><a>Tirar Moderador</a></li> \
-																							<li class="mb-0"><a onclick="confirm(\'excluir_grupo\', \'UID\')">Remover</a></li> \
-																						</ul>';
+                settings_participantes += 
+                "<ul id='user-settings-dropdown-"+ grupo.gtoken +"-"+ participante.utoken +"' class='dropdown-content'> \
+                  <li><a onclick=\"confirm_trigger('change-user-type', {'type': 'moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Moderador</a></li> \
+                  <li><a onclick=\"confirm_trigger('change-user-type', {'type': 'mentor', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Mentor</a></li> \
+                  <li><a onclick=\"confirm_trigger('change-user-type', {'type': 'jogador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Jogador</a></li> \
+                  <li><a onclick=\"confirm_trigger('change-user-type', {'type': 'remover_moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tirar Moderador</a></li> \
+                  <li class='mb-0'><a onclick=\"confirm_trigger('change-user-type', {'type': 'remover_do_grupo', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Remover</a></li> \
+                </ul>";
 								
 								lista_particpantes += '	<li class="col s12 spc-5"> \
 																				<div class="row valign-wrapper"> \
@@ -318,9 +351,6 @@ function getMissoes() {
 		url: "/src/ajax/user.php",
 		data: "gtoken="+ active_group + "&action=missoes-grupo",
 		success: (data) => {
-			
-			console.log(data.missoes);
-			console.log(tipo);
 			
 			$("#missoes-content").html("");
 			
@@ -525,8 +555,6 @@ function getRanking() {
 		data: "gtoken="+ active_group + "&action=ranking-grupo",
 		success: (data) => {
 
-			console.log(data.ranking)
-
 			$("#ranking-content").html("");
 			
 			if ( data.ranking.length > 0 ) {
@@ -636,12 +664,3 @@ function getUsuarioInfo() {
 	});
 	
 }
-
-$(document).ready(() => {
-	
-	if ( window.location.pathname != "/login/" ) {
-		getGrupos();
-		getUsuarioInfo();
-	}
-	
-});
