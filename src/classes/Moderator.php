@@ -47,11 +47,6 @@ class Moderator extends User {
 			$stmt = User::$conn->prepare($sql);
 			$stmt->bind_param("ii", $id_grupo, $id_usuario);
       $stmt->execute();
-      
-			$sql = "DELETE FROM ". TABLE_GRUPOS_USUARIOS ." WHERE id_grupo = ? and id_usuario = ?";
-			$stmt = User::$conn->prepare($sql);
-			$stmt->bind_param("ii", $id_grupo, $id_usuario);
-			$stmt->execute();
 
 		} else throw new Exception( set_error("permission_denied", "Você não é moderador para realizar essa ação!"), 403);
 
