@@ -33,21 +33,22 @@
         $tipo_participante = User::getType($data["utoken"], $data["gtoken"]);
         $message = "";
 
+        // Verifica se é moderador
+        $type_mod = ($tipo_participante == "jogador/moderador" || $tipo_participante == "mentor/moderador") ? "/moderador" : "";
 
         switch ($data["type"]) {
           case "moderador":
-            $novo_tipo = ($tipo_participante == "jogador") ? "jogador/moderador" : "mentor/moderador";
-            $mod->change_type_of_user($data["utoken"], $data["gtoken"], $novo_tipo);
+            $mod->change_type_of_user($data["utoken"], $data["gtoken"], $tipo_participante . $type_mod);
             $message = "Participante atualizado para Moderador com sucesso!";
           break;
 
           case "mentor":
-            $mod->change_type_of_user($data["utoken"], $data["gtoken"], "mentor");
+            $mod->change_type_of_user($data["utoken"], $data["gtoken"], "mentor$type_mod");
             $message = "Participante atualizado para Mentor com sucesso!";
             break;
 
           case "jogador":
-            $mod->change_type_of_user($data["utoken"], $data["gtoken"], "jogador");
+            $mod->change_type_of_user($data["utoken"], $data["gtoken"], "jogador$type_mod");
             $message = "Participante atualizado para Jogador com sucesso!";
             break;
             
