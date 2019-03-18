@@ -198,15 +198,24 @@ function getGrupos() {
 					$.each(grupo.participantes, (key, participante) => {
 					
 							if ( tipo == "jogador/moderador" || tipo == "mentor/moderador" ) {
-								
-                settings_participantes += 
-                "<ul id='user-settings-dropdown-"+ grupo.gtoken +"-"+ participante.utoken +"' class='dropdown-content'> \
-                  <li><a onclick=\"confirm_trigger('change-user-type', {'type': 'moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Moderador</a></li> \
-                  <li><a onclick=\"confirm_trigger('change-user-type', {'type': 'mentor', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Mentor</a></li> \
-                  <li><a onclick=\"confirm_trigger('change-user-type', {'type': 'jogador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Jogador</a></li> \
-                  <li><a onclick=\"confirm_trigger('change-user-type', {'type': 'remover_moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tirar Moderador</a></li> \
-                  <li class='mb-0'><a onclick=\"confirm_trigger('change-user-type', {'type': 'remover_do_grupo', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Remover</a></li> \
-                </ul>";
+                
+                settings_participantes += "<ul id='user-settings-dropdown-"+ grupo.gtoken +"-"+ participante.utoken +"' class='dropdown-content'>";
+
+                if ( participante.tipo == "jogador" || participante.tipo == "mentor" )
+                  settings_participantes += "<li><a onclick=\"confirm_trigger('change-user-type', {'type': 'moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Moderador</a></li>";
+
+                if ( participante.tipo != "mentor" && participante.tipo != "mentor/moderador" )
+                  settings_participantes += "<li><a onclick=\"confirm_trigger('change-user-type', {'type': 'mentor', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Mentor</a></li>";
+
+                if ( participante.tipo != "jogador" && participante.tipo != "jogador/moderador" )
+                  settings_participantes += "<li><a onclick=\"confirm_trigger('change-user-type', {'type': 'jogador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Jogador</a></li>";
+
+                if ( participante.tipo == "jogador/moderador" || participante.tipo == "mentor/moderador" )
+                  settings_participantes += "<li><a onclick=\"confirm_trigger('change-user-type', {'type': 'remover_moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tirar Moderador</a></li>";
+
+                settings_participantes += "<li class='mb-0'><a onclick=\"confirm_trigger('change-user-type', {'type': 'remover_do_grupo', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Remover</a></li>";
+
+                settings_participantes += "</ul>";
 								
 								lista_particpantes += '	<li class="col s12 spc-5"> \
 																				<div class="row valign-wrapper"> \
