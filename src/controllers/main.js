@@ -38,22 +38,45 @@ function toast(status, message) {
 	M.toast({html: "<strong>" + message + "</strong>", classes: color})
 }
 
+// Abre a modal confirm e seta os dados a serem enviados
 function confirm_trigger(action, data) {
+
+  // Muda a pergunta do confirm
+  if ( action == "ativar-grupo" )
+    change_confirm_question("Deseja ativar este grupo?");
+
 	$("#modal-confirm").modal("open");
   confirm_action = action;
   confirm_data = data;
+}
+
+// Muda a questão do confirm
+function change_confirm_question(question) {
+  // Default question
+  question = question || "Tem certeza que deseja realizar esta ação?"; 
+  $("#confirm-question").html(question);
 }
 
 // Excuta a ação confirmada | chamada quando clica em sim (confirm modal)
 function confirm() {
 
   switch (confirm_action) {
+    default:
+      toast("error", "Ação não especificada!");
+    break;
     case "change-user-type":
      change_user_type(confirm_data);
     break;
-  }
-
+    case "ativar-grupo":
+      ativar_grupo(confirm_data);
+      break;
+    }
+  
+  change_confirm_question(); // Volta a pergunta padrão
+  confirm_action = false;
 }
+
+
 
 
 /* Ajax
@@ -82,7 +105,7 @@ function getGrupos() {
 				var lista_particpantes = ""; 													// Lista de participantes
 				var lista_bloqueados = ""; 														// Lista de participantes
 				
-				active_group = data.grupos[0].gtoken;
+				active_group = active_group || data.grupos[0].gtoken;
 				$.each(data.grupos, (key, grupo) => {
 				
 					// Acha o tipo do usuário no grupo
@@ -106,44 +129,44 @@ function getGrupos() {
 					let active = ( active_group == grupo.gtoken ) ? "active" : "";
 					
 					// Card de cada grupo
-					group_list += '<li class="col s12 border-bottom spc-5"> \
-													<div class="row"> \
-														<div class="col s3 center"> \
-															<img src="assets/images/icons/icon-'+ grupo.icone +'.png" class="avatar" onclick="confirm(\'ativar_grupo\', \''+ grupo.gtoken +'\')"> \
-															<br><span class="group-active '+ active +'">Ativo</span> \
+					group_list += "<li class='col s12 border-bottom spc-5'> \
+													<div class='row'> \
+														<div class='col s3 center'> \
+															<img src='assets/images/icons/icon-"+ grupo.icone +".png' class='avatar' onclick=\"confirm_trigger('ativar-grupo', {'gtoken': '"+ grupo.gtoken +"'})\"> \
+															<br><span class='group-active "+ active +"' id='group-active-"+ grupo.gtoken +"'>Ativo</span> \
 														</div> \
-														<div class="col s9"> \
-															<div class="row valign-wrapper"> \
-																<div class="col s10 truncate bold" onclick="showPage(\'#info-grupo-'+ grupo.gtoken +'\')">'+ grupo.nome +'</div> \
-																<div class="col s2 center valign-wrapper"> \
-																	<i class="material-icons more-icon dropdown-trigger settings-dropdown" data-target="group-settings-dropdown-'+ grupo.gtoken +'">more_vert</i> \
+														<div class='col s9'> \
+															<div class='row valign-wrapper'> \
+																<div class='col s10 truncate bold' onclick=\"showPage('#info-grupo-"+ grupo.gtoken +"')\">"+ grupo.nome +"</div> \
+																<div class='col s2 center valign-wrapper'> \
+																	<i class='material-icons more-icon dropdown-trigger settings-dropdown' data-target='group-settings-dropdown-"+ grupo.gtoken +"'>more_vert</i> \
 																</div> \
 															</div> \
-															<div class="row spc-3"> \
-																<div class="col s9"> \
-																	<ul class="top-rank"> \
-																		<li class="gold truncate">1º '+ grupo.podio[0] +'</li> \
-																		<li class="silver truncate">2º '+ grupo.podio[1] +'</li> \
-																		<li class="bronze truncate">3º '+ grupo.podio[2] +'</li> \
+															<div class='row spc-3'> \
+																<div class='col s9'> \
+																	<ul class='top-rank'> \
+																		<li class='gold truncate'>1º "+ grupo.podio[0] +"</li> \
+																		<li class='silver truncate'>2º "+ grupo.podio[1] +"</li> \
+																		<li class='bronze truncate'>3º "+ grupo.podio[2] +"</li> \
 																	</ul> \
 																</div> \
-																<div class="col s3"> \
-																	<div class="row"> \
-																		<div class="col s12 valign-wrapper teal-text" style="margin-top: .5rem"> \
-																			<i class="material-icons fs-15">supervisor_account</i> \
-																			<span class="players-counter">'+ grupo.qtd_participantes +'</span> \
+																<div class='col s3'> \
+																	<div class='row'> \
+																		<div class='col s12 valign-wrapper teal-text' style='margin-top: .5rem'> \
+																			<i class='material-icons fs-15'>supervisor_account</i> \
+																			<span class='players-counter'>"+ grupo.qtd_participantes +"</span> \
 																		</div> \
-																		<div class="col s12 valign-wrapper teal-text" style="margin-top: .3rem"> \
-																			<i class="material-icons fs-15">format_list_bulleted</i> \
-																			<span class="missions-counter">'+ grupo.qtd_missoes +'</span> \
+																		<div class='col s12 valign-wrapper teal-text' style='margin-top: .3rem'> \
+																			<i class='material-icons fs-15'>format_list_bulleted</i> \
+																			<span class='missions-counter'>"+ grupo.qtd_missoes +"</span> \
 																		</div> \
 																	</div> \
 																</div> \
 															</div> \
 														</div> \
 													</div> \
-													<div class="spc-5"></div> \
-												</li>';
+													<div class='spc-5'></div> \
+												</li>";
 					
 					// New page INFO do grupo
 					info_grupos += '<section id="info-grupo-'+ grupo.gtoken +'" class="new-page"> \
@@ -335,8 +358,6 @@ function getGrupos() {
 				
 				$("#missoes-content").show().html('<p class="center" style="margin-top: 50%">Você ainda não está em nenhum grupo <br> para aparecer as missões!</p>');
 				$("#ranking-content").show().html('<p class="center" style="margin-top: 50%">Você ainda não está em nenhum grupo <br> para aparecer o ranking!</p>');
-				
-				$
 				
 			}
 			
@@ -565,7 +586,8 @@ function getRanking() {
 		success: (data) => {
 
 			$("#ranking-content").html("");
-			
+      
+      console.log(data);
 			if ( data.ranking.length > 0 ) {
 				
 				var lista_ranking = '<ul class="row container spc-5">';

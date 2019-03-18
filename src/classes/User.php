@@ -508,7 +508,7 @@ class User {
 						INNER JOIN ". TABLE_GRUPOS_USUARIOS ." gu
 							ON u.id_usuario = gu.id_usuario
 						WHERE 
-							tipo = 'jogador' OR tipo = 'jogador/moderador' AND u.ativo = 'sim' AND id_grupo = ?;";
+							(tipo = 'jogador' OR tipo = 'jogador/moderador') AND gu.status = 'participando' AND u.ativo = 'sim' AND id_grupo = ?;";
 		
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("i", $id_grupo);

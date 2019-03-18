@@ -25,6 +25,11 @@ $(document).ready(() => {
 	// Entrar em grupo
 	$("#btn-entrar-grupo").click(() => {
 		entrar_grupo();
+  });
+  
+	// Ativar grupo
+	$(".ativar-grupo").click(() => {
+		ativar_grupo(confirm_data);
 	});
 	
 });
@@ -175,4 +180,21 @@ function entrar_grupo() {
 		}
 	});
 	
+}
+
+function ativar_grupo(data) {
+
+    
+  if ( data.gtoken == active_group ) {
+    toast("error", "Este grupo já está ativo!");
+    return;
+  }
+
+  active_group = data.gtoken;
+  
+  toast("success", "Grupo ativado com sucesso!");
+  getGrupos();
+  
+
+
 }
