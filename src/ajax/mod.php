@@ -38,7 +38,7 @@
 
         switch ($data["type"]) {
           case "moderador":
-            $mod->change_type_of_user($data["utoken"], $data["gtoken"], $tipo_participante . $type_mod);
+            $mod->change_type_of_user($data["utoken"], $data["gtoken"], $tipo_participante . "/moderador");
             $message = "Participante atualizado para Moderador com sucesso!";
           break;
 
