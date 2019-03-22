@@ -70,6 +70,12 @@ function confirm() {
     case "ativar-grupo":
       ativar_grupo(confirm_data);
       break;
+    case "sair-grupo":
+      sair_grupo(confirm_data);
+      break;
+    case "excluir-grupo":
+      excluir_grupo(confirm_data);
+      break;
     }
   
   change_confirm_question(); // Volta a pergunta padrão
@@ -115,14 +121,14 @@ function getGrupos() {
 					});
 
 					// Settings de cada grupo
-					settings_grupo += '<ul id="group-settings-dropdown-'+ grupo.gtoken +'" class="dropdown-content"> \
-													<li><a onclick="showPage(\'#info-grupo-'+ grupo.gtoken +'\')">Ver Informações</a></li> \
-													<li><a onclick="confirm(\'sair_grupo\', \''+ grupo.gtoken +'\')">Sair do Grupo</a></li>';
+					settings_grupo += " <ul id='group-settings-dropdown-"+ grupo.gtoken +"' class='dropdown-content'> \
+                                <li><a onclick=\"showPage('#info-grupo-"+ grupo.gtoken +"')\">Ver Informações</a></li> \
+                                <li><a onclick=\"confirm_trigger('sair-grupo', {'gtoken': '"+ grupo.gtoken +"'})\">Sair do Grupo</a></li>";
 					
 					if ( tipo == "jogador/moderador" || tipo == "mentor/moderador" )
-						settings_grupo += '<li><a onclick="showPage(\'#editar-grupo\')">Editar Grupo</a></li> \
-													<li><a onclick="confirm(\'excluir_grupo\', \''+ grupo.gtoken +'\')">Excluir Grupo</a></li> \
-												</ul>';
+						settings_grupo += " <li><a onclick=\"showPage('#editar-grupo')\">Editar Grupo</a></li> \
+                                <li><a onclick=\"confirm_trigger('excluir-grupo', {'gtoken': '"+ grupo.gtoken +"'})\">Excluir Grupo</a></li> \
+                              </ul>";
 					else 
 						settings_grupo += '</ul>';
 
@@ -650,7 +656,7 @@ function getRanking() {
 				$("#ranking-content").append(lista_ranking);
 				
 			} else
-				$("#ranking-content").html('<p class="center">No momento não há nenhum jogador neste grupo!</p>');
+				$("#ranking-content").html('<p class="center" style="margin-top: 40%">No momento não há nenhum jogador neste grupo!</p>');
 			
 			$("#ranking-loading").hide();
 			$("#ranking-content").fadeIn();

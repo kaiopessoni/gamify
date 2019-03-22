@@ -260,6 +260,54 @@
 				$error = unserialize($e->getMessage());
 				finish("error", $error["type"], $error["info"]);
 			}
+    break;
+    
+		/* Ranking grupo
+  	====================*/
+		case "sair-grupo":
+			try {
+				
+				$user = new User();
+				$user->getUser($_SESSION["gm_utoken"]);
+        
+        $tipo = User::getType($user->getUtoken(), $data["gtoken"]);
+        $qtd = Group::get_qtd_users($data["gtoken"]);
+
+        // Se tiver 1 participante no grupo, excluir grupo
+        if ( $qtd["total"] == 1 ) {
+
+          $user->exit_group($data["gtoken"]);
+          Group::delete_group($data["gtoken"]);
+
+          finish("success", "exit_success", "Você saiu do grupo e ele foi excluído com sucesso!");
+
+        } else {
+
+          /**
+           *  Se tiver 1 moderador no grupo, verificar se é o moderador que está saindo
+           *  Se não, sair do grupo normalmente
+           *  Se sim, definir um moderador aleatóriamente, dando prioridade para os mentores
+           * 
+           */
+
+          if ( $qtd["moderador"] == 1 && ($tipo == "jogador/moderador" || $tipo == "mentor/moderador") ) {
+
+            $user->exit_group($data["gtoken"]);
+            Group::set_random_mod($data["gtoken"]);
+            finish("success", "exit_success", "Você saiu do grupo e alguém se tornou moderador(a)!");
+
+          }
+
+          // Sai do grupo
+          $user->exit_group($data["gtoken"]);
+          finish("success", "exit_success", "Você saiu do grupo com sucesso!");
+
+        }
+				
+			} catch (Exception $e) {
+				$error = unserialize($e->getMessage());
+				finish("error", $error["type"], $error["info"]);
+			}
 		break;
 			
 		default:

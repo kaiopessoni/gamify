@@ -27,6 +27,7 @@ class Moderator extends User {
 
 	}
 
+  // Unused
 	public function delete_user($utoken, $gtoken) {
 
 		Group::group_exists($gtoken);
@@ -108,20 +109,17 @@ class Moderator extends User {
 
 		} else throw new Exception( set_error("permission_denied", "Você não é moderador para realizar essa ação!"), 403);
 
-	}
-
-
+  }
+  
 }
 
 try {
 	
+	// $group = new Group();
+	// $group->getGroup("CD6C14D0");
 	
-	
-	$group = new Group();
-	$group->getGroup("CD6C14D0");
-	
-	$mod = new Moderator();
-	$mod->getUser("EC270E78");
+	// $mod = new Moderator();
+	// $mod->getUser("EC270E78");
 	
 	// Muda o tipo do participante
 	/*
@@ -133,12 +131,10 @@ try {
 	
 	// Muda o status do participante no grupo
 //	/*
-	$user = new User();
-	$user->getUser("E3DA1C05");
-	$mod->change_status_of_user($user->getUtoken(), $group->getGtoken(), "participando");
+	// $user = new User();
+	// $user->getUser("E3DA1C05");
+	// $mod->change_status_of_user($user->getUtoken(), $group->getGtoken(), "participando");
 //	*/
-	
-	
 	
 //	$user->enter_group("D46F3372");
 	

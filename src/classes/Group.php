@@ -107,20 +107,97 @@ class Group {
 			throw new Exception( set_error("group_doenst_exist", "O grupo informado não existe!"), 403);
 		else
 			return true;
-	}
+  }
+  
+  static function get_qtd_users($gtoken) {
+
+    $sql = "SELECT count(id_usuario) qtd_jogadores FROM ". TABLE_GRUPOS_USUARIOS ."
+            WHERE 
+              status = 'participando' AND 
+              (tipo = ? OR tipo = ?) AND 
+              id_grupo = (SELECT id_grupo FROM ". TABLE_GRUPOS ." WHERE gtoken = ?);";
+
+    $stmt = Group::$conn->prepare($sql);
+
+    $type = "jogador";
+    $type2 = "jogador/moderador";
+
+    $stmt->bind_param("ssi", $type, $type2, $gtoken);
+    $stmt->execute();
+    $stmt->bind_result($qtd_jogadores);
+    $stmt->fetch();
+
+    $type = "mentor";
+    $type2 = "mentor/moderador";
+
+    $stmt->bind_param("ssi", $type, $type2, $gtoken);
+    $stmt->execute();
+    $stmt->bind_result($qtd_mentores);
+    $stmt->fetch();
+
+    $type = "jogador/moderador";
+    $type2 = "mentor/moderador";
+
+    $stmt->bind_param("ssi", $type, $type2, $gtoken);
+    $stmt->execute();
+    $stmt->bind_result($qtd_moderadores);
+    $stmt->fetch();
+
+    return [
+      "total"     => $qtd_jogadores + $qtd_mentores,
+      "jogador"   => $qtd_jogadores,
+      "mentor"    => $qtd_mentores,
+      "moderador" => $qtd_moderadores
+    ];
+
+  }
+
+  static function delete_group($gtoken) {
+
+    Group::group_exists($gtoken);
+
+    $sql = "UPDATE ". TABLE_GRUPOS ." SET ativo  = 'nao' WHERE gtoken = ?";
+
+    $stmt = Group::$conn->prepare($sql);
+    $stmt->bind_param("s", $gtoken);
+    $stmt->execute();
+
+  }
+
+  static function set_random_mod($gtoken) {
+
+    Group::group_exists($gtoken);
+    $qtd = Group::get_qtd_users($gtoken);
+
+    $tipo = ( $qtd["mentor"] > 0 ) ? "mentor" : "jogador";
+
+    $sql = "SELECT id_grupos_usuarios FROM ". TABLE_GRUPOS_USUARIOS ." WHERE tipo = '$tipo' AND status = 'participando' LIMIT 0, 1;";
+
+    $stmt = Group::$conn->prepare($sql);
+    $stmt->execute();
+    $stmt->bind_result($id);
+    $stmt->fetch();
+    $stmt->close();
+
+    // Torna moderador
+    $sql = "UPDATE ". TABLE_GRUPOS_USUARIOS ." SET tipo = '$tipo/moderador' WHERE id_grupos_usuarios = $id;";
+    $stmt = Group::$conn->prepare($sql);
+    $stmt->execute();
+    $stmt->close();
+  }
 	
 }
 
 Group::$conn = $conn;
 
-//try {
-//	
-//	Group::group_exists("56A2DEBC");
-//	
-//} catch (Exception $e) {
-//	$error = unserialize($e->getMessage());
-//	echo json_encode($error, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-//}
+try {
+	
+	// Group::set_random_mod("CD6C14D0");
+	
+} catch (Exception $e) {
+	$error = unserialize($e->getMessage());
+	echo json_encode($error, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+}
 
 	
 	

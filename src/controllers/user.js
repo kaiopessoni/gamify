@@ -182,6 +182,35 @@ function entrar_grupo() {
 	
 }
 
+function sair_grupo(data) {
+  
+  let gtoken = data.gtoken;
+
+	loading("open");
+		
+	$.ajax({
+		type: "GET",
+		url: "/src/ajax/user.php",
+		data: "gtoken=" + gtoken + "&action=sair-grupo",
+		success: (data) => {
+
+      if ( data.code == "exit_success" ) {
+        active_group = null;
+        getGrupos();
+      }
+
+			loading("close");
+			toast(data.status, data.message);
+
+		},
+		error: () => {
+			toast("Verifique sua conexão com a internet!");
+			loading("close");
+		}
+	});
+	
+}
+
 function ativar_grupo(data) {
 
     

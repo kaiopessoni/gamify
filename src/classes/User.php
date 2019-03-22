@@ -278,15 +278,37 @@ class User {
 			
 		}
 		
+  }
+  
+  public function exit_group($gtoken) {
+
+    Group::group_exists($gtoken);
 		
-	}
+		$group = new Group();
+		$group->getGroup($gtoken);
+		
+		$id_grupo 	= $group->getId_grupo();
+    $id_usuario = $this->getId_usuario();
+    
+		// Recebe o status do usuário com o grupo caso exista
+		$sql = "UPDATE ". TABLE_GRUPOS_USUARIOS ." SET tipo = 'jogador', status = 'saiu' WHERE id_grupo = ? and id_usuario = ?";
+		$stmt = User::$conn->prepare($sql);
+		$stmt->bind_param("ii", $id_grupo, $id_usuario);
+		$stmt->execute();
+			
+  }
 	
 	public function getGroups() {
 		
 		$id_usuario = $this->getId_usuario();
 		
 		// Recebe os ids dos grupos que o usuário faz parte
-		$sql = "SELECT id_grupo FROM ". TABLE_GRUPOS_USUARIOS ." WHERE id_usuario = ? and status = 'participando'";
+		$sql = "SELECT gu.id_grupo 
+            FROM ". TABLE_GRUPOS_USUARIOS ." gu
+            INNER JOIN ". TABLE_GRUPOS ." g
+              ON g.id_grupo = gu.id_grupo
+            WHERE id_usuario = ? and status = 'participando' and g.ativo = 'sim';";
+            
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("i", $id_usuario);
 		$stmt->execute();
@@ -329,7 +351,7 @@ class User {
 								INNER JOIN ". TABLE_USUARIOS ." ON ". TABLE_USUARIOS .".id_usuario = ". TABLE_GRUPOS_USUARIOS .".id_usuario
 								WHERE
 									(tipo = 'jogador' or tipo = 'jogador/moderador') AND
-									id_grupo = ?
+									status = 'participando' AND id_grupo = ?
 								ORDER BY
 									pontos DESC
 								LIMIT 0, 3";
@@ -359,7 +381,8 @@ class User {
 				// Recebe os participantes do grupo
 				$sql = "SELECT utoken, nome, tipo, icone FROM ". TABLE_GRUPOS_USUARIOS ."
 								INNER JOIN ". TABLE_USUARIOS ." ON ". TABLE_USUARIOS .".id_usuario = ". TABLE_GRUPOS_USUARIOS .".id_usuario
-								WHERE	ativo = 'sim' AND status = 'participando' AND id_grupo = ?";
+                WHERE	ativo = 'sim' AND status = 'participando' AND id_grupo = ?
+                ORDER BY tipo DESC, nome ASC";
 				
 				$stmt = User::$conn->prepare($sql);
 				$stmt->bind_param("i", $id_grupo);
@@ -420,10 +443,6 @@ class User {
 		}
 		
 		return $grupos;
-		
-//		echo "<pre>";
-//		echo json_encode($grupos, JSON_PRETTY_PRINT);
-//		echo "</pre>";
 		
 	}
 	
@@ -539,10 +558,6 @@ class User {
 		
 		return $ranking;
 		
-//		echo "<pre>";
-//		echo json_encode($ranking, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-//		echo "</pre>";
-		
 	}
 	
 	/* Static Methods
@@ -644,12 +659,13 @@ User::$conn = $conn;
 
 
 try {
-	
-//	$user = new User();
-//	$user->getUser("6BF4477B");
-//	$grupos = $user->getGroups();
-//	$user->getMissions("CD6C14D0");
-//	$user->getRanking("CD6C14D0");
+  
+
+
+	// $user = new User();
+  // $user->getUser("6BF4477B");
+  
+  // $user->exit_group("CD6C14D0");
 	
 	// Criar usuário
 	/*
