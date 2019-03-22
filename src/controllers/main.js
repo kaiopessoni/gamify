@@ -65,7 +65,7 @@ function confirm() {
       toast("error", "Ação não especificada!");
     break;
     case "change-user-type":
-     change_user_type(confirm_data);
+      change_user_type(confirm_data);
     break;
     case "ativar-grupo":
       ativar_grupo(confirm_data);

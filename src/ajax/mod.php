@@ -24,49 +24,49 @@
   	====================*/
 		case "change-user-type":
     
-    try {
-      
-      $mod = new Moderator();
-      $mod->getUser($_SESSION["gm_utoken"]);
-      
-      $tipo_participante = User::getType($data["utoken"], $data["gtoken"]);
-      $message = "";
+      try {
+        
+        $mod = new Moderator();
+        $mod->getUser($_SESSION["gm_utoken"]);
+        
+        $tipo_participante = User::getType($data["utoken"], $data["gtoken"]);
+        $message = "";
 
-      // Verifica se é moderador
-      $type_mod = ($tipo_participante == "jogador/moderador" || $tipo_participante == "mentor/moderador") ? "/moderador" : "";
-      switch ($data["type"]) {
-        case "moderador":
-          $mod->change_type_of_user($data["utoken"], $data["gtoken"], $tipo_participante . "/moderador");
-          $message = "Participante atualizado para Moderador com sucesso!";
-        break;
-
-        case "mentor":
-          $mod->change_type_of_user($data["utoken"], $data["gtoken"], "mentor$type_mod");
-          $message = "Participante atualizado para Mentor com sucesso!";
+        // Verifica se é moderador
+        $type_mod = ($tipo_participante == "jogador/moderador" || $tipo_participante == "mentor/moderador") ? "/moderador" : "";
+        switch ($data["type"]) {
+          case "moderador":
+            $mod->change_type_of_user($data["utoken"], $data["gtoken"], $tipo_participante . "/moderador");
+            $message = "Participante atualizado para Moderador com sucesso!";
           break;
 
-        case "jogador":
-          $mod->change_type_of_user($data["utoken"], $data["gtoken"], "jogador$type_mod");
-          $message = "Participante atualizado para Jogador com sucesso!";
+          case "mentor":
+            $mod->change_type_of_user($data["utoken"], $data["gtoken"], "mentor$type_mod");
+            $message = "Participante atualizado para Mentor com sucesso!";
+            break;
+
+          case "jogador":
+            $mod->change_type_of_user($data["utoken"], $data["gtoken"], "jogador$type_mod");
+            $message = "Participante atualizado para Jogador com sucesso!";
+            break;
+            
+          case "remover_moderador":
+
+            $qtd = Group::get_qtd_users($data["gtoken"]);
+
+            if ( $qtd["moderador"] == 1 )
+              finish("error", "few_mod", "É necessário ter no mínimo um moderador no grupo!");
+
+            $novo_tipo = ($tipo_participante == "jogador/moderador") ? "jogador" : "mentor";
+            $mod->change_type_of_user($data["utoken"], $data["gtoken"], $novo_tipo);
+            $message = "Participante atualizado com sucesso!";
           break;
-          
-        case "remover_moderador":
 
-          $qtd = Group::get_qtd_users($data["gtoken"]);
-
-          if ( $qtd["moderador"] == 1 )
-            finish("error", "few_mod", "É necessário ter no mínimo um moderador no grupo!");
-
-          $novo_tipo = ($tipo_participante == "jogador/moderador") ? "jogador" : "mentor";
-          $mod->change_type_of_user($data["utoken"], $data["gtoken"], $novo_tipo);
-          $message = "Participante atualizado com sucesso!";
-        break;
-
-        case "remover_do_grupo":
-          $mod->change_status_of_user($data["utoken"], $data["gtoken"], "removido");
-          $message = "Participante removido do grupo com sucesso!";
-        break;
-      }
+          case "remover_do_grupo":
+            $mod->change_status_of_user($data["utoken"], $data["gtoken"], "removido");
+            $message = "Participante removido do grupo com sucesso!";
+          break;
+        }
 
 				finish("success", "type_updated", $message);
 				
@@ -76,7 +76,24 @@
 			}
 			
 		break;
-			
+      
+    case "excluir-grupo":
+
+      try {
+
+        $mod = new Moderator();
+        $mod->getUser($_SESSION["gm_utoken"]);
+
+        $mod->delete_group($data["gtoken"]);
+        finish("success", "group_deleted", "Grupo excluído com sucesso!");
+
+      } catch (Exception $e) {
+				$error = unserialize($e->getMessage());
+				finish("error", $error["type"], $error["info"]);
+			}
+
+    break;
+
 		default:
 			finish("error", "invalid_action", "Ação desconhecida!");
 

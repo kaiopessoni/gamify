@@ -262,7 +262,7 @@
 			}
     break;
     
-		/* Ranking grupo
+		/* Sair grupo
   	====================*/
 		case "sair-grupo":
 			try {

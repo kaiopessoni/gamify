@@ -1,6 +1,7 @@
 <?php
 
 require_once "User.php";
+require_once "Group.php";
 
 class Moderator extends User {
 
@@ -111,6 +112,50 @@ class Moderator extends User {
 
   }
   
+  public function delete_group($gtoken) {
+
+    Group::group_exists($gtoken);
+
+    $type = User::getType($this->getUtoken(), $gtoken);
+
+		if ( $type == "jogador/moderador" || $type == "mentor/moderador" ) {
+
+      // Acha o criador
+      $sql = "SELECT criador FROM ". TABLE_GRUPOS ." WHERE gtoken = ?;";
+      $stmt = User::$conn->prepare($sql);
+      $stmt->bind_param("s", $gtoken);
+      $stmt->execute();
+      $stmt->bind_result($criador);
+      $stmt->fetch();
+      $stmt->close();
+
+      // Verifica se o criador está ativo no grupo
+      $sql = "SELECT id_grupos_usuarios from ". TABLE_GRUPOS_USUARIOS ."
+              WHERE 
+                id_usuario = (SELECT id_usuario FROM ". TABLE_USUARIOS ." WHERE utoken = ?) AND
+                id_grupo = (SELECT id_grupo FROM ". TABLE_GRUPOS ." WHERE gtoken = ?) AND
+                status = 'participando';";
+
+      $stmt = User::$conn->prepare($sql);
+      $stmt->bind_param("ss", $criador, $gtoken);
+      $stmt->execute();
+      $stmt->store_result();
+
+      // Está ativo
+      if ( $stmt->num_rows > 0 ) {
+        // Se não for o criador
+        if ( $this->getUtoken() != $criador )
+          throw new Exception( set_error("permission_denied", "Somente o criador do grupo pode excluí-lo caso ele esteja no grupo!"), 403);
+      }
+
+			$sql = "UPDATE ". TABLE_GRUPOS ." SET ativo = 'nao' WHERE gtoken = ?";
+      $stmt = User::$conn->prepare($sql);
+      $stmt->bind_param("s", $gtoken);
+      $stmt->execute();
+
+		} else throw new Exception( set_error("permission_denied", "Você não é moderador para realizar essa ação!"), 403);
+  }
+
 }
 
 try {

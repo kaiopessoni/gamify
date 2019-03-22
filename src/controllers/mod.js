@@ -37,19 +37,17 @@ function excluir_grupo(data) {
 	$.ajax({
 		type: "GET",
 		url: "/src/ajax/mod.php",
-		data: "type="+ data.type +"&utoken="+ data.utoken +"&gtoken="+ data.gtoken +"&action=change-user-type",
+		data: "&gtoken="+ data.gtoken +"&action=excluir-grupo",
 		success: (data) => {
 
+      loading("close");
       toast(data.status, data.message);
 
-      if ( data.code == "type_updated" ) {
+      if ( data.code == "group_deleted" ) {
+        active_group = null;
         getGrupos();
-        setTimeout(() => {
-          showPage("#info-grupo-" + gtoken);
-        }, 1000);
       }
 
-      loading("close");
 
 		},
 		error: () => {

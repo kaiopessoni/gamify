@@ -156,7 +156,7 @@ class Group {
 
     Group::group_exists($gtoken);
 
-    $sql = "UPDATE ". TABLE_GRUPOS ." SET ativo  = 'nao' WHERE gtoken = ?";
+    $sql = "UPDATE ". TABLE_GRUPOS ." SET ativo = 'nao' WHERE gtoken = ?";
 
     $stmt = Group::$conn->prepare($sql);
     $stmt->bind_param("s", $gtoken);
