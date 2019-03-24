@@ -452,10 +452,12 @@ class User {
 		
 		$group = new Group();
 		$group->getGroup($gtoken);
-		
+    
+    $tipo = User::getType($this->getUtoken(), $gtoken);
+
 		$id_grupo = $group->getId_grupo();
 		
-		$sql = "SELECT mtoken, utoken 'criador', u.nome, m.nome, descricao, prazo, recompensa, status, recompensa_final	FROM ". TABLE_MISSOES ." m 
+		$sql = "SELECT mtoken, utoken 'criador', u.nome, m.nome, descricao, prazo, recompensa	FROM ". TABLE_MISSOES ." m 
 						INNER JOIN usuarios u ON m.id_usuario = u.id_usuario
 						LEFT JOIN ". TABLE_MISSOES_JOGADORES ." mj ON m.id_usuario = mj.id_usuario
 						WHERE  id_grupo = ? and m.ativo = 'sim'
@@ -464,7 +466,7 @@ class User {
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("i", $id_grupo);
 		$stmt->execute();
-		$stmt->bind_result($mtoken, $criador, $nome_criador, $nome_missao, $descricao, $prazo, $recompensa, $status, $recompensa_final);
+		$stmt->bind_result($mtoken, $criador, $nome_criador, $nome_missao, $descricao, $prazo, $recompensa);
 		$stmt->store_result();
 		
 		$missoes = [];
@@ -473,17 +475,29 @@ class User {
 			
 			while ( $stmt->fetch() ) {
 				
-				if ( User::getType($this->getUtoken(), $gtoken) == "jogador" || User::getType($this->getUtoken(), $gtoken) == "jogador/moderador" ) {
-					
-					$status = ( $status == NULL ) ? "ativa" : $status;
-					$recompensa_final = ( $recompensa_final == NULL ) ? "" : $recompensa_final;
-					
-					if ( $status != "completada" && date("Y-m-d") > $prazo )
+				if ( $tipo == "jogador" || $tipo == "jogador/moderador" ) {
+          
+          $sql = "SELECT status, recompensa_final from ". TABLE_MISSOES_JOGADORES ." WHERE 
+                  id_missao = (select id_missao from missoes where mtoken = ?) AND
+                  id_usuario = (select id_usuario from usuarios where utoken = ?)";
+
+          $utoken = $this->getUtoken();
+          $stmt2 = User::$conn->prepare($sql);
+          $stmt2->bind_param("ss", $mtoken, $utoken);
+          $stmt2->execute();
+          $stmt2->bind_result($status, $recompensa_final);
+          $stmt2->store_result();
+          $stmt2->fetch();
+
+					if ( date("Y-m-d") > $prazo && $status != "completada" )
 						$status = "expirada";
-					
-					
-				} else
-					$recompensa_final = $status = "";
+          else if ( $status != "pendente" && $status != "completada" )
+            $status = "ativa";
+
+				} else {
+          $status = "";
+					$recompensa_final = "";
+        }
 					
 				
 				$prazo 			= date('d-m-Y', strtotime($prazo));
@@ -506,10 +520,6 @@ class User {
 		}
 		
 		return $missoes;
-		
-		echo "<pre>";
-		echo json_encode($missoes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-		echo "</pre>";
 		
 	}
 	
@@ -662,9 +672,15 @@ try {
   
 
 
-	// $user = new User();
-  // $user->getUser("6BF4477B");
+	$user = new User();
+  $user->getUser("6BF4477B");
+
   
+  
+  // echo "<pre>";
+  // echo json_encode($user->getMissions("CD6C14D0"), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+  // echo "</pre>";
+
   // $user->exit_group("CD6C14D0");
 	
 	// Criar usuário
