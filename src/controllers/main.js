@@ -76,6 +76,9 @@ function confirm() {
     case "excluir-grupo":
       excluirGrupo(confirm_data);
       break;
+    case "completar-missao":
+      completarMissao(confirm_data);
+      break;
     }
   
   change_confirm_question(); // Volta a pergunta padrão
@@ -387,7 +390,7 @@ function getMissoes() {
 		url: "/src/ajax/user.php",
 		data: "gtoken="+ active_group + "&action=missoes-grupo",
 		success: (data) => {
-			
+			console.log(data)
 			$("#missoes-content").html("");
 			
 			if ( data.missoes.length > 0 ) {
@@ -409,49 +412,49 @@ function getMissoes() {
 					if ( tipo == "jogador" || tipo == "jogador/moderador" ) {
 						
 						// Jogador
-						lista_missoes += '<li class="col s12 border-bottom spc-13"> \
-																	<div class="row valign-wrapper"> \
-																		<div class="col s9 truncate bold">'+ missao.nome +'</div> \
-																		<div class="col s3 right-align"> \
-																			<span class="mission-status '+ missao.status +'">'+ missao.status +'</span> \
-																		</div> \
-																	</div> \
-																	<div class="row "> \
-																		<div class="col s1"> \
-																			<i class="material-icons mission-icon">school</i> \
-																		</div> \
-																		<div class="col s11"> \
-																			 <span class="truncate mission-text">'+ missao.nome_criador +'</span> \
-																		</div> \
-																	</div> \
-																	<div class="row valign-wrapper"> \
-																		<div class="col s5"> \
-																			<div class="row"> \
-																				<div class="col s12"> \
-																					<div class="row"> \
-																						<div class="col s2"><i class="material-icons mission-icon">today</i></div> \
-																						<div class="col s9 mission-text">&nbsp;'+ missao.prazo +'</div> \
-																					</div> \
-																				</div> \
-																				<div class="col s12"> \
-																					<div class="row"> \
-																						<div class="col s2"><i class="material-icons mission-icon">star</i></div> \
-																						<div class="col s9 mission-text">&nbsp;'+ missao.recompensa +' pontos</div> \
-																					</div> \
-																				</div> \
-																			</div> \
-																		</div> \
-																		<div class="col s4 center mission-action"> \
-																				<i class="material-icons mission-action-icon desc modal-trigger" href="#modal-descricao-missao-'+ missao.mtoken +'">subject</i><br> \
-																				<span class="mission-text">Ver Descrição</span> \
-																		</div> \
-																		<div class="col s3 center mission-action"> \
-																			<i class="material-icons mission-action-icon" onclick="confirm(\'completar_missao\', \'UID\')">check</i><br> \
-																			<span class="mission-text">Completar</span> \
-																		</div> \
-																	</div> \
-																	<div class="spc-13"></div> \
-																</li>';
+						lista_missoes += "<li class='col s12 border-bottom spc-13'> \
+                                <div class='row valign-wrapper'> \
+                                  <div class='col s9 truncate bold'>"+ missao.nome +"</div> \
+                                  <div class='col s3 right-align'> \
+                                    <span class='mission-status "+ missao.status +"'>"+ missao.status +"</span> \
+                                  </div> \
+                                </div> \
+                                <div class='row'> \
+                                  <div class='col s1'> \
+                                    <i class='material-icons mission-icon'>school</i> \
+                                  </div> \
+                                  <div class='col s11'> \
+                                    <span class='truncate mission-text'>"+ missao.nome_criador +"</span> \
+                                  </div> \
+                                </div> \
+                                <div class='row valign-wrapper'> \
+                                  <div class='col s5'> \
+                                    <div class='row'> \
+                                      <div class='col s12'> \
+                                        <div class='row'> \
+                                          <div class='col s2'><i class='material-icons mission-icon'>today</i></div> \
+                                          <div class='col s9 mission-text'>&nbsp"+ missao.prazo +"</div> \
+                                        </div> \
+                                      </div> \
+                                      <div class='col s12'> \
+                                        <div class='row'> \
+                                          <div class='col s2'><i class='material-icons mission-icon'>star</i></div> \
+                                          <div class='col s9 mission-text'>&nbsp"+ missao.recompensa +" pontos</div> \
+                                        </div> \
+                                      </div> \
+                                    </div> \
+                                  </div> \
+                                  <div class='col s4 center mission-action'> \
+                                      <i class='material-icons mission-action-icon desc modal-trigger' href='#modal-descricao-missao-"+ missao.mtoken +"'>subject</i><br> \
+                                      <span class='mission-text'>Ver Descrição</span> \
+                                  </div> \
+                                  <div class='col s3 center mission-action'> \
+                                    <i class='material-icons mission-action-icon' onclick=\"confirmTrigger('completar-missao', {'mtoken': '"+ missao.mtoken +"'})\">check</i><br> \
+                                    <span class='mission-text'>Completar</span> \
+                                  </div> \
+                                </div> \
+                                <div class='spc-13'></div> \
+                              </li>";
 						
 						
 					} else {
@@ -593,7 +596,6 @@ function getRanking() {
 
 			$("#ranking-content").html("");
       
-      console.log(data);
 			if ( data.ranking.length > 0 ) {
 				
 				var lista_ranking = '<ul class="row container spc-5">';
