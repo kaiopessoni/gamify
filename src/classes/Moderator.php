@@ -160,11 +160,15 @@ class Moderator extends User {
 
 try {
 	
-	// $group = new Group();
-	// $group->getGroup("CD6C14D0");
+	$group = new Group();
+	$group->getGroup("CD6C14D0");
 	
-	// $mod = new Moderator();
-	// $mod->getUser("EC270E78");
+	$mod = new Moderator();
+  $mod->getUser("6BF4477B");
+  
+  $group->setIcone(7);
+
+  $mod->edit_group($group);
 	
 	// Muda o tipo do participante
 	/*

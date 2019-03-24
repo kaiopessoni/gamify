@@ -39,7 +39,7 @@ function toast(status, message) {
 }
 
 // Abre a modal confirm e seta os dados a serem enviados
-function confirm_trigger(action, data) {
+function confirmTrigger(action, data) {
 
   // Muda a pergunta do confirm
   if ( action == "ativar-grupo" )
@@ -65,16 +65,16 @@ function confirm() {
       toast("error", "Ação não especificada!");
     break;
     case "change-user-type":
-      change_user_type(confirm_data);
+      changeUserType(confirm_data);
     break;
     case "ativar-grupo":
-      ativar_grupo(confirm_data);
+      ativarGrupo(confirm_data);
       break;
     case "sair-grupo":
-      sair_grupo(confirm_data);
+      sairGrupo(confirm_data);
       break;
     case "excluir-grupo":
-      excluir_grupo(confirm_data);
+      excluirGrupo(confirm_data);
       break;
     }
   
@@ -123,11 +123,11 @@ function getGrupos() {
 					// Settings de cada grupo
 					settings_grupo += " <ul id='group-settings-dropdown-"+ grupo.gtoken +"' class='dropdown-content'> \
                                 <li><a onclick=\"showPage('#info-grupo-"+ grupo.gtoken +"')\">Ver Informações</a></li> \
-                                <li><a onclick=\"confirm_trigger('sair-grupo', {'gtoken': '"+ grupo.gtoken +"'})\">Sair do Grupo</a></li>";
+                                <li><a onclick=\"confirmTrigger('sair-grupo', {'gtoken': '"+ grupo.gtoken +"'})\">Sair do Grupo</a></li>";
 					
 					if ( tipo == "jogador/moderador" || tipo == "mentor/moderador" )
-						settings_grupo += " <li><a onclick=\"showPage('#editar-grupo')\">Editar Grupo</a></li> \
-                                <li><a onclick=\"confirm_trigger('excluir-grupo', {'gtoken': '"+ grupo.gtoken +"'})\">Excluir Grupo</a></li> \
+						settings_grupo += " <li><a class='edit-group' data-gtoken="+ grupo.gtoken +">Editar Grupo</a></li> \
+                                <li><a onclick=\"confirmTrigger('excluir-grupo', {'gtoken': '"+ grupo.gtoken +"'})\">Excluir Grupo</a></li> \
                               </ul>";
 					else 
 						settings_grupo += '</ul>';
@@ -138,7 +138,7 @@ function getGrupos() {
 					group_list += "<li class='col s12 border-bottom spc-5'> \
 													<div class='row'> \
 														<div class='col s3 center'> \
-															<img src='assets/images/icons/icon-"+ grupo.icone +".png' class='avatar' onclick=\"confirm_trigger('ativar-grupo', {'gtoken': '"+ grupo.gtoken +"'})\"> \
+															<img src='assets/images/icons/icon-"+ grupo.icone +".png' class='avatar' onclick=\"confirmTrigger('ativar-grupo', {'gtoken': '"+ grupo.gtoken +"'})\"> \
 															<br><span class='group-active "+ active +"' id='group-active-"+ grupo.gtoken +"'>Ativo</span> \
 														</div> \
 														<div class='col s9'> \
@@ -231,18 +231,18 @@ function getGrupos() {
                 settings_participantes += "<ul id='user-settings-dropdown-"+ grupo.gtoken +"-"+ participante.utoken +"' class='dropdown-content'>";
 
                 if ( participante.tipo == "jogador" || participante.tipo == "mentor" )
-                  settings_participantes += "<li><a onclick=\"confirm_trigger('change-user-type', {'type': 'moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Moderador</a></li>";
+                  settings_participantes += "<li><a onclick=\"confirmTrigger('change-user-type', {'type': 'moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Moderador</a></li>";
 
                 if ( participante.tipo != "mentor" && participante.tipo != "mentor/moderador" )
-                  settings_participantes += "<li><a onclick=\"confirm_trigger('change-user-type', {'type': 'mentor', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Mentor</a></li>";
+                  settings_participantes += "<li><a onclick=\"confirmTrigger('change-user-type', {'type': 'mentor', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Mentor</a></li>";
 
                 if ( participante.tipo != "jogador" && participante.tipo != "jogador/moderador" )
-                  settings_participantes += "<li><a onclick=\"confirm_trigger('change-user-type', {'type': 'jogador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Jogador</a></li>";
+                  settings_participantes += "<li><a onclick=\"confirmTrigger('change-user-type', {'type': 'jogador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tornar Jogador</a></li>";
 
                 if ( participante.tipo == "jogador/moderador" || participante.tipo == "mentor/moderador" )
-                  settings_participantes += "<li><a onclick=\"confirm_trigger('change-user-type', {'type': 'remover_moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tirar Moderador</a></li>";
+                  settings_participantes += "<li><a onclick=\"confirmTrigger('change-user-type', {'type': 'remover_moderador', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Tirar Moderador</a></li>";
 
-                settings_participantes += "<li class='mb-0'><a onclick=\"confirm_trigger('change-user-type', {'type': 'remover_do_grupo', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Remover</a></li>";
+                settings_participantes += "<li class='mb-0'><a onclick=\"confirmTrigger('change-user-type', {'type': 'remover_do_grupo', 'gtoken': '"+ grupo.gtoken +"', 'utoken': '"+ participante.utoken +"'})\">Remover</a></li>";
 
                 settings_participantes += "</ul>";
 								

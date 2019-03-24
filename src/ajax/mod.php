@@ -77,6 +77,8 @@
 			
 		break;
       
+    /* Exclue um grupo
+  	====================*/
     case "excluir-grupo":
 
       try {
@@ -93,6 +95,56 @@
 			}
 
     break;
+
+    /* Recebe as informações do grupo para o mod editar o grupo
+  	====================*/
+		case "grupo-info":
+			
+			try {
+				
+				$group = new Group();
+        $group->getGroup($data["gtoken"]);
+        
+				$array = [
+					"nome" 	=> $group->getNome(),
+					"icone" => $group->getIcone(),
+				];
+        
+				finish("success", "group_info", "Info recebidas com sucesso!", $array, "grupo");
+				
+			} catch (Exception $e) {
+				$error = unserialize($e->getMessage());
+				finish("error", $error["type"], $error["info"]);
+			}
+			
+    break;
+    
+    /* Edita o grupo
+  	====================*/
+		case "editar-grupo":
+			
+			try {
+        
+        $mod = new Moderator();
+        $mod->getUser($_SESSION["gm_utoken"]);
+
+				$group = new Group();
+        $group->getGroup($data["gtoken"]);
+
+        $group->setNome($data["nome"]);
+        $group->setIcone($data["icone"]);
+
+        $mod->edit_group($group);
+
+				finish("success", "group_updated", "Grupo atualizado com sucesso!");
+				
+			} catch (Exception $e) {
+				$error = unserialize($e->getMessage());
+				finish("error", $error["type"], $error["info"]);
+			}
+			
+		break;
+
 
 		default:
 			finish("error", "invalid_action", "Ação desconhecida!");

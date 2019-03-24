@@ -3,38 +3,38 @@ $(document).ready(() => {
 	
 	// Fazer Login
 	$("#btn-fazer-login").click(() => {
-		fazer_login();
+		fazerLogin();
 	});
 	
 	// Cadastrar Usuário
 	$("#btn-cadastrar").click(() => {
-		cadastrar_usuario();
+		cadastrarUsuario();
 	});
 	
 	// Editar Perfil
 	$("#btn-editar-perfil").click(() => {
-		editar_perfil();
+		editarPerfil();
 		getGrupos();
 	});
 	
 	// Criar grupo
 	$("#btn-criar-grupo").click(() => {
-		criar_grupo();
+		criarGrupo();
 	});
 	
 	// Entrar em grupo
 	$("#btn-entrar-grupo").click(() => {
-		entrar_grupo();
+		entrarGrupo();
   });
   
 	// Ativar grupo
 	$(".ativar-grupo").click(() => {
-		ativar_grupo(confirm_data);
+		ativarGrupo(confirm_data);
 	});
 	
 });
 
-function fazer_login() {
+function fazerLogin() {
 	
 	loading("open");
 		
@@ -62,7 +62,7 @@ function fazer_login() {
 	
 }
 
-function cadastrar_usuario() {
+function cadastrarUsuario() {
 	
 	loading("open");
 		
@@ -87,7 +87,7 @@ function cadastrar_usuario() {
 	});
 }
 
-function editar_perfil() {
+function editarPerfil() {
 	
 	loading("open");
 		
@@ -115,7 +115,7 @@ function editar_perfil() {
 	
 }
 
-function criar_grupo() {
+function criarGrupo() {
 	
 	loading("open");
 		
@@ -151,7 +151,7 @@ function criar_grupo() {
 	
 }
 
-function entrar_grupo() {
+function entrarGrupo() {
 	
 	loading("open");
 		
@@ -182,7 +182,7 @@ function entrar_grupo() {
 	
 }
 
-function sair_grupo(data) {
+function sairGrupo(data) {
   
   let gtoken = data.gtoken;
 
@@ -211,7 +211,7 @@ function sair_grupo(data) {
 	
 }
 
-function ativar_grupo(data) {
+function ativarGrupo(data) {
 
     
   if ( data.gtoken == active_group ) {

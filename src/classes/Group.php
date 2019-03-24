@@ -91,9 +91,6 @@ class Group {
 		
 	}
 	
-	/* Static Methods
-	==================================================*/
-	
 	static function group_exists($gtoken) {
 		
 		$sql = "SELECT gtoken FROM ". TABLE_GRUPOS ." WHERE gtoken = ? and ativo = 'sim'";
