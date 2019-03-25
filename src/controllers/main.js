@@ -39,10 +39,14 @@ function toast(status, message) {
 }
 
 // Sincroniza os dados
-function sync() {
+function sync(show_message) {
   getGrupos();
   getUsuarioInfo();
-  toast("success", "Sincronização realizada com sucesso!");
+  
+  show_message = show_message || false;
+
+  if ( show_message )
+    toast("success", "Sincronização realizada com sucesso!");
 }
 
 // Abre a modal confirm e seta os dados a serem enviados
@@ -397,7 +401,7 @@ function getMissoes() {
 		url: "/src/ajax/user.php",
 		data: "gtoken="+ active_group + "&action=missoes-grupo",
 		success: (data) => {
-			console.log(data)
+
 			$("#missoes-content").html("");
 			
 			if ( data.missoes.length > 0 ) {
