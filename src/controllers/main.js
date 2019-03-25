@@ -38,6 +38,13 @@ function toast(status, message) {
 	M.toast({html: "<strong>" + message + "</strong>", classes: color})
 }
 
+// Sincroniza os dados
+function sync() {
+  getGrupos();
+  getUsuarioInfo();
+  toast("success", "Sincronização realizada com sucesso!");
+}
+
 // Abre a modal confirm e seta os dados a serem enviados
 function confirmTrigger(action, data) {
 
