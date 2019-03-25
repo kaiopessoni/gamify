@@ -184,11 +184,11 @@ class Mentor extends User {
 
 try {
 	
-	$group = new Group();
-	$group->getGroup("CD6C14D0");
+	// $group = new Group();
+	// $group->getGroup("CD6C14D0");
 	
-	$mentor = new Mentor();
-	$mentor->getUser("EC270E78");
+	// $mentor = new Mentor();
+	// $mentor->getUser("EC270E78");
 	
 	// Cria uma missão
 	/*
@@ -203,9 +203,9 @@ try {
 	
 	// Aceita a missão ou recusa
 //	/*
-	$mission = new Mission();
-	$mission->getMission("62F63EFA");
-	$mentor->respond_player("CD6C14D0", "62F63EFA", "6BF4477B", "completada", 900);
+	// $mission = new Mission();
+	// $mission->getMission("62F63EFA");
+	// $mentor->respond_player("CD6C14D0", "62F63EFA", "6BF4477B", "completada", 900);
 //	*/
 	
 	

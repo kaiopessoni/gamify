@@ -19,7 +19,7 @@
 			
 			<div class="row">
         <div class="input-field col s12">
-          <textarea id="descricao_missao" class="materialize-textarea" maxlength="250"></textarea>
+          <textarea id="descricao_missao" name="descricao_missao" class="materialize-textarea" maxlength="250"></textarea>
           <label for="descricao_missao">Descrição da Missão</label>
         </div>
       </div>
@@ -35,9 +35,9 @@
 				<div class="input-field col s12">
 					<select name="recompensa_missao">
 						<option value="" disabled selected>Escolha a recompensa</option>
-						<option value="">250 pontos</option>
-						<option value="">500 pontos</option>
-						<option value="">1000 pontos</option>
+						<option value="250">250 pontos</option>
+						<option value="500">500 pontos</option>
+						<option value="1000">1000 pontos</option>
 					</select>
 					<label>Recompensa</label>
 				</div>
@@ -45,7 +45,7 @@
 			
 			<div class="row">
 				<div class="input-field col s12 center">
-					<button class="btn teal waves-effect waves-light" type="button">Criar Missão</button>
+					<button id="btn-criar-missao" class="btn teal waves-effect waves-light" type="button">Criar Missão</button>
 				</div>
 			</div>
 

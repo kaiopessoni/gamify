@@ -461,7 +461,7 @@ class User {
 						INNER JOIN usuarios u ON m.id_usuario = u.id_usuario
 						LEFT JOIN ". TABLE_MISSOES_JOGADORES ." mj ON m.id_usuario = mj.id_usuario
 						WHERE  id_grupo = ? and m.ativo = 'sim'
-						ORDER BY prazo DESC";
+						ORDER BY m.id_missao DESC";
 		
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("i", $id_grupo);

@@ -12,22 +12,22 @@
 
 			<div class="row">
 				<div class="input-field col s12">
-					<input type="text" id="nome_missao" name="nome_missao" class="charCounters" data-length="30" maxlength="30">
-					<label for="nome_missao">Nome da Missão</label>
+					<input type="text" id="nome_missao2" name="nome_missao" class="charCounters" data-length="30" maxlength="30">
+					<label for="nome_missao2">Nome da Missão</label>
 				</div>
 			</div>
 			
 			<div class="row">
         <div class="input-field col s12">
-          <textarea id="descricao_missao" class="materialize-textarea"></textarea>
-          <label for="descricao_missao">Descrição da Missão</label>
+          <textarea id="descricao_missao2" class="materialize-textarea"></textarea>
+          <label for="descricao_missao2">Descrição da Missão</label>
         </div>
       </div>
       
 			<div class="row mb">
         <div class="input-field col s12">
-           <input type="text" id="prazo_missao" name="prazo_missao" class="datepicker">
-          <label for="prazo_missao">Prazo da Missão</label>
+           <input type="text" id="prazo_missao2" name="prazo_missao" class="datepicker">
+          <label for="prazo_missao2">Prazo da Missão</label>
         </div>
       </div>
 

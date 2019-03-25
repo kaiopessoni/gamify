@@ -56,7 +56,7 @@ class Mission {
 	}
 
 	public function setDescricao($descricao) {
-		$this->descricao = $descricao;
+		$this->descricao = nl2br($descricao);
 	}
 
 	public function getPrazo() {

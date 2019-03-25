@@ -1,5 +1,8 @@
 var activePage = "main-page";
 
+// Date for datepicker
+var d = new Date();
+
 $(document).ready(() => {
 	
 	// Initializations
@@ -11,8 +14,22 @@ $(document).ready(() => {
 	$('.fixed-action-btn').floatingActionButton();
 	$('select').formSelect();
 	$('.modal').modal();
-	$('.datepicker').datepicker();
-	
+	$('.datepicker').datepicker({
+    format: 'dd/mm/yyyy',
+    yearRange: 1,
+    i18n: {
+      cancel: "Cancelar",
+      clear: "Limpar",
+      months: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+      monthsShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+      weekdaysShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+      weekdaysAbbrev: ['D','S','T','Q','Q','S','S'],
+    },
+    minDate: new Date(d.getFullYear(), d.getMonth(), d.getDate()),
+  });
+  
+  
+
 	// Options
 	// ==========================================================================
 	$('.modal.middle').modal({
