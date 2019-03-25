@@ -410,7 +410,10 @@ function getMissoes() {
 														</div>\n';
 					
 					if ( tipo == "jogador" || tipo == "jogador/moderador" ) {
-						
+            
+            let hide_action = (missao.status == "ativa") ? "" : "hide";
+            let col_desc    = (missao.status == "ativa") ? "s4" : "s7";
+
 						// Jogador
 						lista_missoes += "<li class='col s12 border-bottom spc-13'> \
                                 <div class='row valign-wrapper'> \
@@ -444,11 +447,11 @@ function getMissoes() {
                                       </div> \
                                     </div> \
                                   </div> \
-                                  <div class='col s4 center mission-action'> \
+                                  <div class='col "+ col_desc +" center mission-action'> \
                                       <i class='material-icons mission-action-icon desc modal-trigger' href='#modal-descricao-missao-"+ missao.mtoken +"'>subject</i><br> \
                                       <span class='mission-text'>Ver Descrição</span> \
                                   </div> \
-                                  <div class='col s3 center mission-action'> \
+                                  <div class='col s3 center mission-action "+ hide_action +"'> \
                                     <i class='material-icons mission-action-icon' onclick=\"confirmTrigger('completar-missao', {'mtoken': '"+ missao.mtoken +"'})\">check</i><br> \
                                     <span class='mission-text'>Completar</span> \
                                   </div> \
