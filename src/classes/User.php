@@ -270,7 +270,7 @@ class User {
 			
 			// Coloca o status do usuário com o grupo como pendente
 			$sql = "INSERT INTO ". TABLE_GRUPOS_USUARIOS ." (id_grupo, id_usuario, nivel, pontos, tipo, status)
-				VALUES (?, ?, 1, 0, 'jogador', 'pendente')";
+				      VALUES (?, ?, 1, 0, 'jogador', 'pendente')";
 		
 			$stmt = User::$conn->prepare($sql);
 			$stmt->bind_param("ii", $id_grupo, $id_usuario);
@@ -291,7 +291,7 @@ class User {
     $id_usuario = $this->getId_usuario();
     
 		// Recebe o status do usuário com o grupo caso exista
-		$sql = "UPDATE ". TABLE_GRUPOS_USUARIOS ." SET tipo = 'jogador', status = 'saiu' WHERE id_grupo = ? and id_usuario = ?";
+		$sql = "UPDATE ". TABLE_GRUPOS_USUARIOS ." SET status = 'saiu' WHERE id_grupo = ? and id_usuario = ?";
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("ii", $id_grupo, $id_usuario);
 		$stmt->execute();

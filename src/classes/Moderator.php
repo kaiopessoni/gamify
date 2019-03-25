@@ -100,7 +100,7 @@ class Moderator extends User {
 
 		if ( $type == "jogador/moderador" || $type == "mentor/moderador" ) {
 
-			if ( $status != "participando" && $status != "bloqueado" && $status != "removido" )
+			if ( $status != "participando" && $status != "bloqueado" && $status != "removido" && $status != "saiu")
 				throw new Exception( set_error("invalid_status", "O status informado é inválido!"), 400);
 
 			$sql = "UPDATE ". TABLE_GRUPOS_USUARIOS ." SET status = ? WHERE id_grupo = ? and id_usuario = ?";

@@ -63,8 +63,22 @@
           break;
 
           case "remover_do_grupo":
-            $mod->change_status_of_user($data["utoken"], $data["gtoken"], "removido");
-            $message = "Participante removido do grupo com sucesso!";
+          
+            $qtd = Group::get_qtd_users($data["gtoken"]);
+
+            if ( $qtd["total"] == 1 ) {
+
+              $mod->change_status_of_user($data["utoken"], $data["gtoken"], "saiu");
+              $mod->delete_group($data["gtoken"]);
+              $message = "Participante removido e grupo excluído com sucesso!";
+
+            } else {
+
+              $mod->change_status_of_user($data["utoken"], $data["gtoken"], "removido");
+              $message = "Participante removido do grupo com sucesso!";
+
+            }
+            
           break;
         }
 
