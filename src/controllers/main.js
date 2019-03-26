@@ -2,7 +2,7 @@
 ==============================*/
 
 var active_group;     // Grupo ativo
-var tipo; 				    // Tipo do usuário no grupo
+var tipo = []; 				    // Tipo do usuário no grupo
 var confirm_action;   // Tipo de ação confirm
 var confirm_data;     // Dados 
 
@@ -134,7 +134,7 @@ function getGrupos() {
 					// Acha o tipo do usuário no grupo
 					$.each(grupo.participantes, (key, participante) => {
 						if ( participante.utoken == utoken )
-							tipo = participante.tipo;
+							tipo[grupo.gtoken] = participante.tipo;
 					});
 
 					// Settings de cada grupo
@@ -142,7 +142,7 @@ function getGrupos() {
                                 <li><a onclick=\"showPage('#info-grupo-"+ grupo.gtoken +"')\">Ver Informações</a></li> \
                                 <li><a onclick=\"confirmTrigger('sair-grupo', {'gtoken': '"+ grupo.gtoken +"'})\">Sair do Grupo</a></li>";
 					
-					if ( tipo == "jogador/moderador" || tipo == "mentor/moderador" )
+					if ( tipo[grupo.gtoken] == "jogador/moderador" || tipo[grupo.gtoken] == "mentor/moderador" )
 						settings_grupo += " <li><a class='edit-group' data-gtoken="+ grupo.gtoken +">Editar Grupo</a></li> \
                                 <li><a onclick=\"confirmTrigger('excluir-grupo', {'gtoken': '"+ grupo.gtoken +"'})\">Excluir Grupo</a></li> \
                               </ul>";
@@ -243,7 +243,7 @@ function getGrupos() {
 					
 					$.each(grupo.participantes, (key, participante) => {
 					
-							if ( tipo == "jogador/moderador" || tipo == "mentor/moderador" ) {
+							if ( tipo[grupo.gtoken] == "jogador/moderador" || tipo[grupo.gtoken] == "mentor/moderador" ) {
                 
                 settings_participantes += "<ul id='user-settings-dropdown-"+ grupo.gtoken +"-"+ participante.utoken +"' class='dropdown-content'>";
 
@@ -422,7 +422,7 @@ function getMissoes() {
 															</div> \
 														</div>\n';
 					
-					if ( tipo == "jogador" || tipo == "jogador/moderador" ) {
+					if ( tipo[active_group] == "jogador" || tipo[active_group] == "jogador/moderador" ) {
             
             let hide_action = (missao.status == "ativa") ? "" : "hide";
             let col_desc    = (missao.status == "ativa") ? "s4" : "s7";
@@ -569,7 +569,7 @@ function getMissoes() {
 			} else
 				$("#missoes-content").html('<p class="center" style="margin-top: 40%">Este grupo ainda não possui nenhuma missão!</p>');
 			
-			if ( tipo == "mentor" || tipo == "mentor/moderador" )
+			if ( tipo[active_group] == "mentor" || tipo[active_group] == "mentor/moderador" )
 				$("#missoes-content").append('<div class="fixed-action-btn"> \
 																				<a onclick="showPage(\'#criar-missao\')" class="btn-floating btn-large teal"><i class="large material-icons waves-effect">add</i></a> \
 																			</div>');
@@ -619,7 +619,7 @@ function getRanking() {
 				
 				$.each(data.ranking, (key, player) => {
 					
-					if ( (tipo == "jogador" || tipo == "jogador/moderador") && (player.utoken == utoken) ) {
+					if ( (tipo[active_group] == "jogador" || tipo[active_group] == "jogador/moderador") && (player.utoken == utoken) ) {
 						
 						let next_level = player.nivel + 1;
 						let next_points = next_level * 1000;
