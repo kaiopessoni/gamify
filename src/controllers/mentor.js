@@ -100,3 +100,29 @@ function editarMissao(mtoken) {
 		}
 	});
 }
+
+function excluirMissao(data) {
+
+  loading("open");
+  let mtoken = data.mtoken;
+		
+	$.ajax({
+		type: "GET",
+		url: "/src/ajax/mentor.php",
+		data: "gtoken=" + active_group + "&mtoken="+ data.mtoken +"&action=excluir-missao",
+		success: (data) => {
+
+      loading("close");
+      toast(data.status, data.message);
+
+      if ( data.code == "mission_deleted" )
+        sync()
+
+		},
+		error: () => {
+			toast("Verifique sua conexão com a internet!");
+			loading("close");
+		}
+	});
+
+}

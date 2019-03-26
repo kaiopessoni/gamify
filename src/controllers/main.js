@@ -90,6 +90,9 @@ function confirm() {
     case "completar-missao":
       completarMissao(confirm_data);
       break;
+    case "excluir-missao":
+      excluirMissao(confirm_data);
+      break;
     }
   
   change_confirm_question(); // Volta a pergunta padrão
@@ -477,7 +480,7 @@ function getMissoes() {
 
 							settings_missao += "<ul id='mission-settings-dropdown-"+ missao.mtoken +"' class='dropdown-content'> \
 																		<li><a class='edit-mission' data-mtoken='"+ missao.mtoken +"'>Editar Missão</a></li> \
-																		<li><a>Excluir Missão</a></li> \
+																		<li><a onclick=\"confirmTrigger('excluir-missao', {'mtoken': '"+ missao.mtoken +"'})\">Excluir Missão</a></li> \
 																	</ul>\n";
 							
 							lista_missoes += '<li class="col s12 border-bottom spc-13"> \

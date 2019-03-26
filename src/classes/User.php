@@ -329,8 +329,8 @@ class User {
 									g.gtoken,
 									g.nome,
 									g.icone,
-									(SELECT count(id_usuario) FROM ". TABLE_GRUPOS_USUARIOS ." WHERE id_grupo = ?) 'qtd_participantes',
-									(SELECT count(id_missao) FROM ". TABLE_MISSOES ." WHERE id_grupo = ? AND g.ativo = 'sim') 'qtd_missoes'
+									(SELECT count(id_usuario) FROM ". TABLE_GRUPOS_USUARIOS ." WHERE id_grupo = ? AND status ='participando') 'qtd_participantes',
+									(SELECT count(id_missao) FROM ". TABLE_MISSOES ." m WHERE id_grupo = ? AND g.ativo = 'sim' AND m.ativo = 'sim') 'qtd_missoes'
 								FROM 
 									". TABLE_GRUPOS ." g
 								INNER JOIN ". TABLE_GRUPOS_USUARIOS ." gu

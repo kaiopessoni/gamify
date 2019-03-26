@@ -66,7 +66,6 @@ function excluirGrupo(data) {
         getGrupos();
       }
 
-
 		},
 		error: () => {
 			toast("Verifique sua conexão com a internet!");

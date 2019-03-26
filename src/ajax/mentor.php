@@ -99,6 +99,25 @@
       
     break;
 
+    /* Exclue uma missão
+  	====================*/
+    case "excluir-missao":
+
+      try {
+
+        $mentor = new Mentor();
+        $mentor->getUser($_SESSION["gm_utoken"]);
+
+        $mentor->delete_mission($data["gtoken"], $data["mtoken"]);
+        finish("success", "mission_deleted", "Missão excluída com sucesso!");
+
+      } catch (Exception $e) {
+				$error = unserialize($e->getMessage());
+				finish("error", $error["type"], $error["info"]);
+			}
+
+    break;
+
 		default:
 			finish("error", "invalid_action", "Ação desconhecida!");
 
