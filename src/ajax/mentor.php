@@ -8,6 +8,7 @@
 	require_once "../classes/User.php";
 	require_once "../classes/Group.php";
 	require_once "../classes/Mentor.php";
+	require_once "../classes/Mission.php";
 	session_start();
 	
 	set_time_limit(300);
@@ -43,7 +44,60 @@
 				finish("error", $error["type"], $error["info"]);
 			}
 			
-		break;
+    break;
+    
+    /* Recebe as informações do grupo para o mod editar o grupo
+  	====================*/
+		case "missao-info":
+			
+      try {
+        
+        $missao = new Mission();
+        $missao->getMission($data["mtoken"]);
+        
+        $array = [
+          "nome"        => $missao->getNome(),
+          "descricao"   => $missao->getDescricao(),
+          "prazo"       => $missao->getPrazo(),
+          "recompensa"  => $missao->getRecompensa()
+        ];
+        
+        finish("success", "missao_info", "Info da missao recebida com sucesso!", $array, "missao");
+        
+      } catch (Exception $e) {
+        $error = unserialize($e->getMessage());
+        finish("error", $error["type"], $error["info"]);
+      }
+      
+    break;
+
+        /* Edita o grupo
+  	====================*/
+		case "editar-missao":
+			
+      try {
+        
+        $mentor = new Mentor();
+        $mentor->getUser($_SESSION["gm_utoken"]);
+        
+        $missao = new Mission();
+        $missao->getMission($data["mtoken"]);
+        
+        $missao->setNome($data["nome"]);
+        $missao->setDescricao($data["descricao"]);
+        $missao->setRecompensa($data["recompensa"]);
+        
+        $mentor->update_mission($data["gtoken"], $missao, $data["prazo"]);
+        
+        finish("success", "mission_updated", "Missão atualizada com sucesso!");
+        
+        
+      } catch (Exception $e) {
+        $error = unserialize($e->getMessage());
+        finish("error", $error["type"], $error["info"]);
+      }
+      
+    break;
 
 		default:
 			finish("error", "invalid_action", "Ação desconhecida!");

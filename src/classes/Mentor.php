@@ -53,7 +53,7 @@ class Mentor extends User {
 
 	}
 
-	public function update_mission($gtoken, Mission $mission) {
+	public function update_mission($gtoken, Mission $mission, $prazo) {
 		
 		$mtoken = $mission->getMtoken();
 		Mission::mission_exists($mtoken);
@@ -66,7 +66,7 @@ class Mentor extends User {
 				
 				$nome 			= $mission->getNome();
 				$descricao 	= $mission->getDescricao();
-				$prazo 			= str_replace('/', '-', $missao->getPrazo());
+				$prazo 			= str_replace('/', '-', $prazo);
 				$prazo 			= date('Y-m-d', strtotime($prazo));
 				$recompensa = $mission->getRecompensa();
 
@@ -183,7 +183,8 @@ class Mentor extends User {
 }
 
 try {
-	
+  
+  // echo str_replace('/', '-', $missao->getPrazo());
 	// $group = new Group();
 	// $group->getGroup("CD6C14D0");
 	

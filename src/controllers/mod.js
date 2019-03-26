@@ -4,7 +4,6 @@ var gtoken_to_edit;
 $(document).ready(() => {
 
   $("#btn-editar-grupo").click(() => {
-    console.log(gtoken_to_edit);
     editarGrupo(gtoken_to_edit);
   });
 

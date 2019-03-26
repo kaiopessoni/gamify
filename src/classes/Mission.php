@@ -56,7 +56,7 @@ class Mission {
 	}
 
 	public function setDescricao($descricao) {
-		$this->descricao = nl2br($descricao);
+		$this->descricao = $descricao;
 	}
 
 	public function getPrazo() {
@@ -106,7 +106,7 @@ class Mission {
 			$this->setMtoken($mtoken);
 			$this->setNome($nome);
 			$this->setDescricao($descricao);
-			$this->setPrazo($prazo);
+      $this->setPrazo(date('d/m/Y', strtotime($prazo)));
 			$this->setRecompensa($recompensa);
 			
 		}

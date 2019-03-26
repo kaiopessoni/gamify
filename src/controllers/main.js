@@ -412,7 +412,6 @@ function getMissoes() {
 				
 				$.each(data.missoes, (key, missao) => {
 					
-					
 					modais_missao += '<div id="modal-descricao-missao-'+ missao.mtoken +'" class="modal middle"> \
 															<div class="modal-content"> \
 																<h6 class="bold">'+ missao.nome +'</h6> \
@@ -476,10 +475,10 @@ function getMissoes() {
 						// Criador da missão
 						if ( missao.criador == utoken ) {
 
-							settings_missao += '<ul id="mission-settings-dropdown-'+ missao.mtoken +'" class="dropdown-content"> \
-																		<li><a onclick="showPage(\'#editar-missao\')">Editar Missão</a></li> \
-																		<li><a onclick="confirm(\'excluir_missao\', \'UID\')">Excluir Missão</a></li> \
-																	</ul>\n';
+							settings_missao += "<ul id='mission-settings-dropdown-"+ missao.mtoken +"' class='dropdown-content'> \
+																		<li><a class='edit-mission' data-mtoken='"+ missao.mtoken +"'>Editar Missão</a></li> \
+																		<li><a>Excluir Missão</a></li> \
+																	</ul>\n";
 							
 							lista_missoes += '<li class="col s12 border-bottom spc-13"> \
 																	<div class="row valign-wrapper"> \

@@ -508,7 +508,7 @@ class User {
 					"criador" 					=> $criador,
 					"nome_criador"			=> $nome_criador,
 					"nome" 							=> $nome_missao,
-					"descricao" 				=> $descricao,
+					"descricao" 				=> nl2br($descricao),
 					"prazo" 						=> $prazo,
 					"recompensa" 				=> $recompensa,
 					"status" 						=> $status,
