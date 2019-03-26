@@ -459,7 +459,6 @@ class User {
 		
 		$sql = "SELECT mtoken, utoken 'criador', u.nome, m.nome, descricao, prazo, recompensa	FROM ". TABLE_MISSOES ." m 
 						INNER JOIN usuarios u ON m.id_usuario = u.id_usuario
-						LEFT JOIN ". TABLE_MISSOES_JOGADORES ." mj ON m.id_usuario = mj.id_usuario
 						WHERE  id_grupo = ? and m.ativo = 'sim'
 						ORDER BY m.id_missao DESC";
 		
@@ -669,16 +668,12 @@ User::$conn = $conn;
 
 
 try {
-  
 
+	// $user = new User();
+  // $user->getUser("6BF4477B");
 
-	$user = new User();
-  $user->getUser("6BF4477B");
-
-  
-  
   // echo "<pre>";
-  // echo json_encode($user->getMissions("CD6C14D0"), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+  // echo json_encode($user->getMissions("4CBF0304"), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
   // echo "</pre>";
 
   // $user->exit_group("CD6C14D0");
