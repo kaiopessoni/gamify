@@ -176,9 +176,9 @@
 				$group = new Group();
 				$group->setNome($nome);
 				$group->setIcone($icone);
-				$user->create_group($group);
+				$gtoken = $user->create_group($group);
 				
-				finish("success", "group_created", "Grupo criado com sucesso!");
+				finish("success", "group_created", "Grupo criado com sucesso!", ["gtoken" => $gtoken], "grupo");
 				
 			} catch (Exception $e) {
 				$error = unserialize($e->getMessage());

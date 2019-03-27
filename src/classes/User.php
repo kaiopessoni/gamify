@@ -209,7 +209,8 @@ class User {
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("ii", $id_grupo, $id_usuario);
 		$stmt->execute();
-		
+    
+    return $gtoken;
 	}
 	
 	// Deletes a group

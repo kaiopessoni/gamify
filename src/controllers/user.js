@@ -126,8 +126,9 @@ function criarGrupo() {
 		success: (data) => {
 
 			if ( data.code == "group_created" ) {
-				
-				getGrupos();
+        
+				active_group = data.grupo.gtoken;
+				sync();
 				
 				hidePage("#criar-grupo");
 				
