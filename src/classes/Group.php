@@ -119,7 +119,7 @@ class Group {
     $type = "jogador";
     $type2 = "jogador/moderador";
 
-    $stmt->bind_param("ssi", $type, $type2, $gtoken);
+    $stmt->bind_param("sss", $type, $type2, $gtoken);
     $stmt->execute();
     $stmt->bind_result($qtd_jogadores);
     $stmt->fetch();
@@ -127,7 +127,7 @@ class Group {
     $type = "mentor";
     $type2 = "mentor/moderador";
 
-    $stmt->bind_param("ssi", $type, $type2, $gtoken);
+    $stmt->bind_param("sss", $type, $type2, $gtoken);
     $stmt->execute();
     $stmt->bind_result($qtd_mentores);
     $stmt->fetch();
@@ -135,7 +135,7 @@ class Group {
     $type = "jogador/moderador";
     $type2 = "mentor/moderador";
 
-    $stmt->bind_param("ssi", $type, $type2, $gtoken);
+    $stmt->bind_param("sss", $type, $type2, $gtoken);
     $stmt->execute();
     $stmt->bind_result($qtd_moderadores);
     $stmt->fetch();
