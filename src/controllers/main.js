@@ -376,11 +376,13 @@ function getGrupos() {
 			
 			if ( active_group != "NULL" ) {
 				getMissoes();
-				getRanking();
+        getRanking();
+        getNotificacoes();
 			} else {
 				
 				$("#missoes-content").show().html('<p class="center" style="margin-top: 50%">Você ainda não está em nenhum grupo <br> para aparecer as missões!</p>');
 				$("#ranking-content").show().html('<p class="center" style="margin-top: 50%">Você ainda não está em nenhum grupo <br> para aparecer o ranking!</p>');
+				$("#notificacoes-content").show().html('<p class="center" style="margin-top: 50%">Você ainda não está em nenhum grupo <br> para aparecer as notificações!</p>');
 				
 			}
 			
@@ -689,7 +691,151 @@ function getRanking() {
 }
 
 function getNotificacoes() {
-	
+  
+  $("#notificacoes-content").hide();
+	$("#notificacoes-loading").show();
+
+  $.ajax({
+    type: "GET",
+		url: "/src/ajax/user.php",
+		data: "gtoken="+ active_group + "&action=notificacoes-grupo",
+		success: (data) => {
+
+      $("#notificacoes-content").html("");
+      var content = "";
+      var notificacoes = data.notificacoes;
+
+      console.log(data);
+
+      // Participar de grupo
+      if ( tipo[active_group] == "jogador/moderador" || tipo[active_group] == "mentor/moderador" ) {
+        
+        content += "<div class='row container spc-8 border-bottom'> \
+                      <div class='col s12 bold teal-text center'>Participar de grupo</div> \
+                    </div>";
+        
+        
+        if ( notificacoes.participar_grupo.length == 0 ) {
+
+          content += "<p class='container center spc-5 grey-text text-darken-1'>Nenhuma notificação.</p>";
+
+        } else {
+          
+          var settings_participar_grupo = "";
+          content += "<ul class='row container fs-9'>";
+                  
+          $.each(notificacoes.participar_grupo, (key, item) => {
+
+            settings_participar_grupo += "<ul id='notification-invite-dropdown-"+ item.utoken +"' class='dropdown-content'> \
+                                            <li><a>Aceitar</a></li> \
+                                            <li><a>Não aceitar</a></li> \
+                                            <li><a>Bloquear</a></li> \
+                                          </ul>"
+
+            content += "<li class='col s12 spc-5'> \
+                          <div class='row'> \
+                            <div class='col s10'> \
+                              <strong>"+ item.nome_usuario +"</strong> deseja participar deste grupo <strong>("+ item.nome_grupo +")</strong>. \
+                            </div> \
+                            <div class='col s2 center'><i class='material-icons more-icon dropdown-trigger settings-dropdown' data-target='notification-invite-dropdown-"+ item.utoken +"'>more_vert</i></div> \
+                          </div> \
+                        </li>";
+
+          });
+
+          content += "</ul>";
+
+        }
+
+      }
+
+      // Missões para confirmar
+      if ( tipo[active_group] == "mentor" || tipo[active_group] == "mentor/moderador" ) {
+        
+        content += "<div class='row container spc-8 border-bottom'> \
+                      <div class='col s12 bold teal-text center'>Missões para confirmar</div> \
+                    </div>";
+
+
+        if ( notificacoes.confirmar_missoes.length == 0 ) {
+
+          content += "<p class='container center spc-5 grey-text text-darken-1'>Nenhuma notificação.</p>";
+
+        } else {
+
+          var settings_confirmar_missoes = "";
+          content += "<ul class='row container fs-9'>";
+              
+          $.each(notificacoes.confirmar_missoes, (key, item) => {
+
+            settings_confirmar_missoes += " <ul id='notification-mission-dropdown-"+ item.mtoken +"' class='dropdown-content'> \
+                                              <li><a>Confirmar</a></li> \
+                                              <li><a>Rejeitar</a></li> \
+                                            </ul>";
+
+            content += "<li class='col s12 spc-5'> \
+                          <div class='row'> \
+                            <div class='col s10'> \
+                              <strong>"+ item.nome_jogador +"</strong> diz que completou a missão <strong>"+ item.nome_missao +"</strong>. \
+                            </div> \
+                            <div class='col s2 center'><i class='material-icons more-icon dropdown-trigger settings-dropdown' data-target='notification-mission-dropdown-"+ item.mtoken +"'>more_vert</i></div> \
+                          </div> \
+                        </li>";
+
+          });
+
+          content += "</ul>";
+
+        }
+
+      // Missões completadas
+      } else {
+
+        content += "<div class='row container spc-8 border-bottom'> \
+                      <div class='col s12 bold teal-text center'>Missões Completadas</div> \
+                    </div>";
+        
+        if ( notificacoes.missoes_completadas.length == 0 ) {
+
+          content += "<p class='container center spc-5 grey-text text-darken-1'>Nenhuma notificação.</p>";
+
+        } else {
+
+          content += "<ul class='row container fs-9'>";
+              
+          $.each(notificacoes.missoes_completadas, (key, item) => {
+            content += "<li class='col s12 spc-5'> \
+                          <div class='row'> \
+                            <div class='col s12'><strong>"+ item.nome_mentor +"</strong> confirmou que você completou a missão <strong>"+ item.nome_missao +"</strong>. Você ganhou <strong>"+ item.recompensa_final +" pontos</strong> como recompensa.</div> \
+                          </div> \
+                        </li>";
+          });
+
+          content += "</ul>";
+
+        }
+      }
+
+      $("#notificacoes-content").append(settings_participar_grupo);
+      $("#notificacoes-content").append(settings_confirmar_missoes);
+      $("#notificacoes-content").append(content);
+
+      $(".dropdown-trigger").dropdown();
+      $(".settings-dropdown").dropdown({
+        constrainWidth: false
+      });
+
+      $("#notificacoes-loading").hide();
+			$("#notificacoes-content").fadeIn();
+
+      
+    },
+		error: () => {
+			toast("Verifique sua conexão com a internet!");
+			loading("close");
+		}
+  });
+
 }
 
 // Recebe as informações do usuário e passa para o form de editar perfil

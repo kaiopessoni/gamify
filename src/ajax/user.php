@@ -261,6 +261,23 @@
 				finish("error", $error["type"], $error["info"]);
 			}
     break;
+
+		/* Notificações grupo
+  	====================*/
+		case "notificacoes-grupo":
+			try {
+				
+				$user = new User();
+				$user->getUser($_SESSION["gm_utoken"]);
+				$notifications = $user->getNotifications($data["gtoken"]);
+				
+				finish("success", "notifications_received", "Notificações recebida com scesso!", $notifications, "notificacoes");
+				
+			} catch (Exception $e) {
+				$error = unserialize($e->getMessage());
+				finish("error", $error["type"], $error["info"]);
+			}
+    break;
     
 		/* Sair grupo
   	====================*/

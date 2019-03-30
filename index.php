@@ -138,72 +138,23 @@
 		<!---------- NOTIFICAÇÕES ---------->
 		<section id="notificacoes" style="display: none;">
 			
-			
-			<ul id="notification-invite-dropdown" class="dropdown-content">
-				<li><a onclick="confirm('excluir_grupo', 'UID')">Aceitar</a></li>
-				<li><a onclick="confirm('excluir_grupo', 'UID')">Não aceitar</a></li>
-				<li><a onclick="confirm('excluir_grupo', 'UID')">Bloquear</a></li>
-			</ul>
-			
-			<ul id="notification-mission-dropdown" class="dropdown-content">
-				<li><a onclick="confirm('excluir_grupo', 'UID')">Confirmar</a></li>
-				<li><a onclick="confirm('excluir_grupo', 'UID')">Rejeitar</a></li>
-			</ul>
-			
-			<!-- Participar de grupo -->
-			<div class="row container spc-8 border-bottom">
-				<div class="col s12 bold teal-text center">
-					Participar de grupo
-				</div>
-			</div>
-			
-			<ul class="row container fs-9">
-				<li class="col s12 spc-5">
-					<div class="row">
-						<div class="col s10"><strong>'NOME JOGADOR'</strong> quer participar do grupo <strong>'NOME GRUPO'</strong>.</div>
-						<div class="col s2 center"><i class="material-icons more-icon dropdown-trigger settings-dropdown" data-target="notification-invite-dropdown">more_vert</i></div>
-					</div>
-				</li>
-			</ul>
-			
-			<!-- Missões para confirmar -->
-			<div class="spc-13"></div>
-			<div class="row container spc-8 border-bottom">
-				<div class="col s12 bold teal-text center">
-					Missões para confirmar
-				</div>
-			</div>
-			
-			<ul class="row container fs-9">
-				<li class="col s12 spc-5">
-					<div class="row">
-						<div class="col s10"><strong>'NOME JOGADOR'</strong> diz que completou a missão <strong>'NOME DA MISSÃO'</strong>.</div>
-						<div class="col s2 center"><i class="material-icons more-icon dropdown-trigger settings-dropdown" data-target="notification-mission-dropdown">more_vert</i></div>
-					</div>
-				</li>
-				<li class="col s12 spc-5">
-					<div class="row">
-						<div class="col s10"><strong>'NOME JOGADOR'</strong> diz que completou a missão <strong>'NOME DA MISSÃO'</strong>.</div>
-						<div class="col s2 center"><i class="material-icons more-icon dropdown-trigger settings-dropdown" data-target="notification-mission-dropdown">more_vert</i></div>
-					</div>
-				</li>
-			</ul>
-			
-			<!-- Missões Completadas -->
-			<div class="spc-13"></div>
-			<div class="row container spc-8 border-bottom">
-				<div class="col s12 bold teal-text center">
-					Missões Completadas
-				</div>
-			</div>
-			
-			<ul class="row container fs-9">
-				<li class="col s12 spc-5">
-					<div class="row">
-						<div class="col s12"><strong>'NOME MENTOR'</strong> confirmou que você completou a missão <strong>'NOME MISSAO'</strong>. Você ganhou <strong>'500 pontos'</strong> como recompensa.</div>
-					</div>
-				</li>
-			</ul>
+      <div id="notificacoes-loading" class="center loading" style="display: none;">
+        <div class="preloader-wrapper small active">
+          <div class="spinner-layer spinner-teal-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+				
+      <div id="notificacoes-content" style="display: none;"></div>
 			
 		</section>
 		

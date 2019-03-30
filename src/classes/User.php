@@ -568,7 +568,117 @@ class User {
 		
 		return $ranking;
 		
-	}
+  }
+  
+  public function getNotifications($gtoken) {
+
+    Group::group_exists($gtoken);
+
+    $notifications["participar_grupo"]    = [];
+    $notifications["confirmar_missoes"]   = [];
+    $notifications["missoes_completadas"] = [];
+
+    $utoken = $this->getUtoken();
+    $tipo = User::getType($utoken, $gtoken);
+    
+    
+    if ( $tipo == "jogador/moderador" || $tipo == "mentor/moderador" ) {
+
+      $sql = "SELECT utoken, gtoken, u.nome, g.nome FROM ". TABLE_GRUPOS_USUARIOS ." gu
+              INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = gu.id_usuario
+              INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = gu.id_grupo
+              WHERE g.ativo = 'sim' AND gtoken = ? AND gu.status = 'pendente';";
+      
+      $stmt = User::$conn->prepare($sql);
+      $stmt->bind_param("s", $gtoken);
+      $stmt->execute();
+      $stmt->bind_result($utoken_sql, $gtoken_sql, $nome_usuario, $nome_grupo);
+      $stmt->store_result();
+
+      if ( $stmt->num_rows > 0 ) {
+        while ( $stmt->fetch() ) {
+
+          $notifications["participar_grupo"][] = [
+            "utoken"	      => $utoken_sql,
+            "gtoken"		    => $gtoken_sql,
+            "nome_usuario"  => $nome_usuario,
+            "nome_grupo"	  => $nome_grupo,
+          ];
+
+        }
+      }
+
+    }
+
+    if ( $tipo == "mentor" || $tipo == "mentor/moderador" ) {
+
+      $sql = "SELECT utoken, mtoken, u.nome, m.nome FROM ". TABLE_MISSOES_JOGADORES ." mj
+              INNER JOIN ". TABLE_MISSOES ." m ON m.id_missao = mj.id_missao
+              INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = mj.id_usuario
+              INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = m.id_grupo
+              WHERE g.ativo = 'sim' AND mj.status = 'pendente' AND gtoken = ?
+              AND m.id_usuario = (SELECT id_usuario FROM ". TABLE_USUARIOS ." WHERE utoken = ?);";
+      
+      $stmt = User::$conn->prepare($sql);
+      $stmt->bind_param("ss", $gtoken, $utoken);
+      $stmt->execute();
+      $stmt->bind_result($utoken_sql, $mtoken_sql, $nome_jogador, $nome_missao);
+      $stmt->store_result();
+
+      if ( $stmt->num_rows > 0 ) {
+        while ( $stmt->fetch() ) {
+
+          $notifications["confirmar_missoes"][] = [
+            "utoken"	      => $utoken_sql,
+            "mtoken"		    => $mtoken_sql,
+            "nome_jogador"  => $nome_jogador,
+            "nome_missao"	  => $nome_missao,
+          ];
+
+        }
+      }
+
+    }
+
+    if ( $tipo == "jogador" || $tipo == "jogador/moderador" ) {
+
+      $sql = "SELECT u.nome, m.nome, mj.recompensa_final FROM ". TABLE_MISSOES_JOGADORES ." mj
+              INNER JOIN ". TABLE_MISSOES ." m ON m.id_missao = mj.id_missao
+              INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = m.id_usuario
+              INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = m.id_grupo
+              WHERE g.ativo = 'sim' AND mj.status = 'completada' AND gtoken = ?
+              AND mj.id_usuario = (SELECT id_usuario FROM ". TABLE_USUARIOS ." WHERE utoken = ?);";
+      
+      $stmt = User::$conn->prepare($sql);
+      $stmt->bind_param("ss", $gtoken, $utoken);
+      $stmt->execute();
+      $stmt->bind_result($nome_jogador, $nome_missao, $recompensa_final);
+      $stmt->store_result();
+
+      if ( $stmt->num_rows > 0 ) {
+        while ( $stmt->fetch() ) {
+
+          $notifications["missoes_completadas"][] = [
+            "nome_mentor"       => $nome_jogador,
+            "nome_missao"	      => $nome_missao,
+            "recompensa_final"  => $recompensa_final,
+          ];
+
+        }
+      }
+
+    }
+
+
+
+
+		
+		
+
+		
+		return $notifications;
+
+  }
 	
 	/* Static Methods
 	==================================================*/
@@ -670,11 +780,18 @@ User::$conn = $conn;
 
 try {
 
+  // kaio - 6BF4477B
+  // ana - EC270E78
+  // luis - F29A2D9A
+  // neto - E3DA1C05
+
 	// $user = new User();
   // $user->getUser("6BF4477B");
+  // $notifications = $user->getNotifications("CD6C14D0");
 
   // echo "<pre>";
-  // echo json_encode($user->getMissions("4CBF0304"), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+  // finish("success", "notifications_received", "Notificações recebida com scesso!", $notifications, "notificacoes");
+  // // echo json_encode($user->getNotifications("CD6C14D0"), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
   // echo "</pre>";
 
   // $user->exit_group("CD6C14D0");
