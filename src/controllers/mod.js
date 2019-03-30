@@ -121,3 +121,27 @@ function editarGrupo(gtoken) {
 		}
 	});
 }
+
+function participarGrupo(data) {
+
+  loading("open");
+		
+	$.ajax({
+		type: "GET",
+		url: "/src/ajax/mod.php",
+		data: "gtoken="+ active_group +"&utoken="+ data.utoken +"&status="+ data.status +"&action=participar-grupo",
+		success: (data) => {
+
+      loading("close");
+      toast(data.status, data.message);
+
+      if ( data.code == "status_updated" )
+        sync();
+
+		},
+		error: () => {
+			toast("Verifique sua conexão com a internet!");
+			loading("close");
+		}
+	});
+}

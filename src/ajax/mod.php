@@ -159,6 +159,44 @@
 			
 		break;
 
+    /* Muda o tipo do participante do grupo
+  	====================*/
+		case "participar-grupo":
+    
+      try {
+
+        // finish("success", "askdoasd", "Usuário participando do grupo! " . $data["status"]);
+        $mod = new Moderator();
+        $mod->getUser($_SESSION["gm_utoken"]);
+        
+        switch ($data["status"]) {
+          case "aceitar":
+            $mod->change_status_of_user($data["utoken"], $data["gtoken"], "participando");
+            $message = "O usuário foi aceito, agora é um participante do grupo!";
+          break;
+
+          case "nao-aceitar":
+          $mod->change_status_of_user($data["utoken"], $data["gtoken"], "recusado");
+            $message = "O usuário não foi aceito no grupo!";
+            break;
+
+          case "bloquear":
+            $mod->change_status_of_user($data["utoken"], $data["gtoken"], "bloqueado");
+            $message = "O usuário foi bloqueado e não poderá enviar mais solicitações!";
+            break;
+
+          default:
+            $message = "Ação desconhecida!";
+        }
+
+        finish("success", "status_updated", $message);
+        
+      } catch (Exception $e) {
+        $error = unserialize($e->getMessage());
+        finish("error", $error["type"], $error["info"]);
+      }
+      
+    break;
 
 		default:
 			finish("error", "invalid_action", "Ação desconhecida!");

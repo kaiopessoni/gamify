@@ -93,6 +93,9 @@ function confirm() {
     case "excluir-missao":
       excluirMissao(confirm_data);
       break;
+    case "participar-grupo":
+      participarGrupo(confirm_data);
+      break;
     }
   
   change_confirm_question(); // Volta a pergunta padrão
@@ -116,7 +119,7 @@ function getGrupos() {
 		url: "/src/ajax/user.php",
 		data: "action=grupos-usuario",
 		success: (data) => {
-			
+      
 			$("#grupos-content").html("");
 			
 			if ( data.grupos.length > 0 ) {
@@ -238,7 +241,8 @@ function getGrupos() {
 						"mentor": '<i class="material-icons user-badge">school</i>',
 						"mentor/moderador": '<i class="material-icons user-badge">verified_user</i> <i class="material-icons user-badge">school</i>'
 					};
-					
+          
+          // Lista de Çarticipantes  
 					lista_particpantes = '<ul id="user-list" class="row mb">';
 					
 					$.each(grupo.participantes, (key, participante) => {
@@ -276,44 +280,8 @@ function getGrupos() {
 																					</div> \
 																					<div class="col s2 center"><i class="material-icons more-icon dropdown-trigger settings-dropdown" data-target="user-settings-dropdown-'+ grupo.gtoken +'-'+ participante.utoken +'">more_vert</i></div> \
 																				</div> \
-																			</li>';
-								
-								if ( grupo.bloqueados.length > 0 ) {
-									
-									lista_bloqueados += '	<div class="row spc-13"> \
-																					<div class="col s12 bold"> \
-																						Usuários Bloqueados \
-																						<div class="divider"></div> \
-																					</div> \
-																					<div class="col s12"> \
-																						<ul class="row">';
-									
-									$.each(grupo.bloqueados, (key, bloqueado) => {
-										
-										lista_bloqueados += '	<li class="col s12 spc-3"> \
-																						<div class="row valign-wrapper"> \
-																							<div class="col s8 truncate">'+ bloqueado.nome +'</div> \
-																							<div class="col s4"><span class="valign-wrapper right fs-9">Desbloquear&nbsp;<i class="material-icons fs-12">block</i></span></div> \
-																						</div> \
-																					</li>';
-									});
-																							
-									lista_bloqueados += '			</ul> \
-																					</div> \
-																				</div>';
-									
-								} else {
-									lista_bloqueados = '	<div class="row spc-13"> \
-																					<div class="col s12 bold"> \
-																						Usuários Bloqueados \
-																						<div class="divider"></div> \
-																					</div> \
-																					<div class="col s12"> \
-																						<p class="center">Nenhum usuário foi bloqueado!</p> \
-																					</div> \
-																				</div>';
-								}
-								
+                                      </li>';
+                                      
 							} else {
 								
 								lista_particpantes += '	<li class="col s12 spc-5"> \
@@ -331,10 +299,46 @@ function getGrupos() {
 																				</li>';
 							}
 							
-					});
-					
+          });
+          
 					lista_particpantes += '</ul>';
-					
+          
+          // Lista de Bloqueados  
+          if ( grupo.bloqueados.length > 0 ) {
+									
+            lista_bloqueados += '	<div class="row spc-13"> \
+                                    <div class="col s12 bold"> \
+                                      Usuários Bloqueados \
+                                      <div class="divider"></div> \
+                                    </div> \
+                                    <div class="col s12"> \
+                                      <ul class="row">';
+            
+            $.each(grupo.bloqueados, (key, bloqueado) => {
+
+              lista_bloqueados += '	<li class="col s12 spc-3"> \
+                                      <div class="row valign-wrapper"> \
+                                        <div class="col s8 truncate">'+ bloqueado.nome +'</div> \
+                                        <div class="col s4"><span class="valign-wrapper right fs-9">Desbloquear&nbsp;<i class="material-icons fs-12">block</i></span></div> \
+                                      </div> \
+                                    </li>';
+            });
+                                        
+            lista_bloqueados += '			</ul> \
+                                    </div> \
+                                  </div>';
+            
+          } else {
+            lista_bloqueados = '	<div class="row spc-13"> \
+                                    <div class="col s12 bold"> \
+                                      Usuários Bloqueados \
+                                      <div class="divider"></div> \
+                                    </div> \
+                                    <div class="col s12"> \
+                                      <p class="center">Nenhum usuário foi bloqueado!</p> \
+                                    </div> \
+                                  </div>';
+          }
 					
 					info_grupos += settings_participantes;
 					info_grupos += lista_particpantes;
@@ -705,8 +709,6 @@ function getNotificacoes() {
       var content = "";
       var notificacoes = data.notificacoes;
 
-      console.log(data);
-
       // Participar de grupo
       if ( tipo[active_group] == "jogador/moderador" || tipo[active_group] == "mentor/moderador" ) {
         
@@ -727,9 +729,9 @@ function getNotificacoes() {
           $.each(notificacoes.participar_grupo, (key, item) => {
 
             settings_participar_grupo += "<ul id='notification-invite-dropdown-"+ item.utoken +"' class='dropdown-content'> \
-                                            <li><a>Aceitar</a></li> \
-                                            <li><a>Não aceitar</a></li> \
-                                            <li><a>Bloquear</a></li> \
+                                            <li><a onclick=\"confirmTrigger('participar-grupo', {'status': 'aceitar', 'utoken': '"+ item.utoken +"'})\">Aceitar</a></li> \
+                                            <li><a onclick=\"confirmTrigger('participar-grupo', {'status': 'nao-aceitar', 'utoken': '"+ item.utoken +"'})\">Não aceitar</a></li> \
+                                            <li><a onclick=\"confirmTrigger('participar-grupo', {'status': 'bloquear', 'utoken': '"+ item.utoken +"'})\">Bloquear</a></li> \
                                           </ul>"
 
             content += "<li class='col s12 spc-5'> \

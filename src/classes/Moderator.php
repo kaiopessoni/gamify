@@ -87,6 +87,8 @@ class Moderator extends User {
 	public function change_status_of_user($utoken, $gtoken, $status) {
 
 		Group::group_exists($gtoken);
+    
+    $status_types = ["pendente", "participando", "bloqueado", "desbloqueado", "recusado", "removido", "saiu"];
 
 		$group = new Group();
 		$group->getGroup($gtoken);
@@ -96,11 +98,11 @@ class Moderator extends User {
 		$user->getUser($utoken);
 		$id_usuario = $user->getId_usuario();
 
-		$type = User::getType($this->getUtoken(), $gtoken);
-
+    $type = User::getType($this->getUtoken(), $gtoken);
+    
 		if ( $type == "jogador/moderador" || $type == "mentor/moderador" ) {
 
-			if ( $status != "participando" && $status != "bloqueado" && $status != "removido" && $status != "saiu")
+			if ( !in_array($status, $status_types) )
 				throw new Exception( set_error("invalid_status", "O status informado é inválido!"), 400);
 
 			$sql = "UPDATE ". TABLE_GRUPOS_USUARIOS ." SET status = ? WHERE id_grupo = ? and id_usuario = ?";

@@ -244,12 +244,12 @@ class User {
 		$id_usuario = $this->getId_usuario();
 		
 		// Recebe o status do usuário com o grupo caso exista
-		$sql = "SELECT status FROM ". TABLE_GRUPOS_USUARIOS ." WHERE id_grupo = ? and id_usuario = ?";
+		$sql = "SELECT id_grupos_usuarios, status FROM ". TABLE_GRUPOS_USUARIOS ." WHERE id_grupo = ? and id_usuario = ?";
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("ii", $id_grupo, $id_usuario);
 		$stmt->execute();
 		$stmt->store_result();
-		$stmt->bind_result($status);
+		$stmt->bind_result($id_row, $status);
 		$stmt->fetch();
 		
 		// Caso já exista uma relação entre o grupo e o usuário
@@ -265,7 +265,14 @@ class User {
 			case "bloqueado":
 				throw new Exception( set_error("user_is_blocked", "Você foi bloqueado neste grupo e não pode enviar mais solicitações!"));
 				break;
-			endswitch;
+      endswitch;
+      
+      // Caso já exista o registro do usuário com o grupo, atualiza o status para pendente
+			$sql = "UPDATE ". TABLE_GRUPOS_USUARIOS ." SET status = 'pendente' WHERE id_grupos_usuarios = ?";
+
+      $stmt = User::$conn->prepare($sql);
+      $stmt->bind_param("i", $id_row);
+      $stmt->execute();
 			
 		} else {
 			
@@ -406,16 +413,19 @@ class User {
 				// Recebe usuários bloqueados se for moderador
 				if ( User::getType($this->getUtoken(), $gtoken) == "jogador/moderador" || User::getType($this->getUtoken(), $gtoken) == "mentor/moderador" ) {
 					
-					$sql = "SELECT utoken, nome FROM ". TABLE_GRUPOS_USUARIOS ."
-									INNER JOIN ". TABLE_USUARIOS ." ON ". TABLE_USUARIOS .".id_usuario = ". TABLE_GRUPOS_USUARIOS .".id_usuario
-									WHERE	ativo = 'sim' AND status = 'bloqueado' AND id_grupo = ?";
-									$stmt = User::$conn->prepare($sql);
+          $sql = "SELECT gtoken, utoken, u.nome FROM ". TABLE_GRUPOS_USUARIOS ." gu
+                  INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = gu.id_usuario
+                  INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = gu.id_grupo
+                  WHERE u.ativo = 'sim' AND status = 'bloqueado' AND gu.id_grupo = ?";
+
+          $stmt = User::$conn->prepare($sql);
 					$stmt->bind_param("i", $id_grupo);
 					$stmt->execute();
-					$stmt->bind_result($utoken, $nome_bloqueado);
+					$stmt->bind_result($gtoken_sql, $utoken, $nome_bloqueado);
 
 					while ( $stmt->fetch() ) { 
 						$bloqueados[] = [
+							"gtoken" 	=> $gtoken_sql,
 							"utoken" 	=> $utoken,
 							"nome" 		=> $nome_bloqueado
 						];
