@@ -44,13 +44,13 @@ class Player extends User {
       
       $date_now = date("d/m/Y");
 			
-			if ( strtotime($date_now) >= strtotime($mission->getPrazo()) )
+			if ( strtotime($date_now) > strtotime($mission->getPrazo()) )
 					throw new Exception( set_error("mission_expired", "Não é possível realizar esta ação pois a missão está expirada!"), 403);
 			
 			$id_usuario = $this->getId_usuario();
 			$id_missao 	= $mission->getId_missao();
 			
-			$sql = "SELECT status FROM ". TABLE_MISSOES_JOGADORES ." WHERE id_usuario = ? and id_missao = ? ";
+			$sql = "SELECT status, id_missoes_jogadores FROM ". TABLE_MISSOES_JOGADORES ." WHERE id_usuario = ? and id_missao = ? ";
 			$stmt = User::$conn->prepare($sql);
 			$stmt->bind_param("ii", $id_usuario, $id_missao);
 			$stmt->execute();
@@ -58,7 +58,7 @@ class Player extends User {
 
 			if ( $stmt->num_rows == 1 ) {
 				
-				$stmt->bind_result($status);
+				$stmt->bind_result($status, $id_row);
 				$stmt->fetch();
 				
 				switch($status):
@@ -71,7 +71,14 @@ class Player extends User {
 					case "expirada":
 						throw new Exception( set_error("mission_already_completed", "Não é possível completar a missão pois ela está expirada!"), 401);
 						break;
-				endswitch;
+        endswitch;
+        
+        // Caso já exista o registro do usuário com a missão, atualiza o status para pendente
+        $sql = "UPDATE ". TABLE_MISSOES_JOGADORES ." SET status = 'pendente' WHERE id_missoes_jogadores = ?";
+
+        $stmt = User::$conn->prepare($sql);
+        $stmt->bind_param("i", $id_row);
+        $stmt->execute();
 				
 			} else  {
 				

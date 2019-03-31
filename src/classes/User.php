@@ -467,11 +467,12 @@ class User {
     $tipo = User::getType($this->getUtoken(), $gtoken);
 
 		$id_grupo = $group->getId_grupo();
-		
+            
 		$sql = "SELECT mtoken, utoken 'criador', u.nome, m.nome, descricao, prazo, recompensa	FROM ". TABLE_MISSOES ." m 
-						INNER JOIN usuarios u ON m.id_usuario = u.id_usuario
-						WHERE  id_grupo = ? and m.ativo = 'sim'
-						ORDER BY m.id_missao DESC";
+            INNER JOIN ". TABLE_USUARIOS ." u ON m.id_usuario = u.id_usuario
+            INNER JOIN ". TABLE_GRUPOS_USUARIOS ." gu ON gu.id_usuario = u.id_usuario
+            WHERE  m.id_grupo = ? AND m.ativo = 'sim' AND gu.status = 'participando'
+            ORDER BY m.id_missao DESC";
 		
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("i", $id_grupo);
@@ -487,7 +488,7 @@ class User {
 				
 				if ( $tipo == "jogador" || $tipo == "jogador/moderador" ) {
           
-          $sql = "SELECT status, recompensa_final from ". TABLE_MISSOES_JOGADORES ." WHERE 
+          $sql = "SELECT status, recompensa_final FROM ". TABLE_MISSOES_JOGADORES ." WHERE 
                   id_missao = (select id_missao from missoes where mtoken = ?) AND
                   id_usuario = (select id_usuario from usuarios where utoken = ?)";
 
@@ -652,7 +653,7 @@ class User {
 
     if ( $tipo == "mentor" || $tipo == "mentor/moderador" ) {
 
-      $sql = "SELECT utoken, mtoken, u.nome, m.nome, prazo FROM ". TABLE_MISSOES_JOGADORES ." mj
+      $sql = "SELECT utoken, mtoken, u.nome, m.nome, m.recompensa, prazo FROM ". TABLE_MISSOES_JOGADORES ." mj
               INNER JOIN ". TABLE_MISSOES ." m ON m.id_missao = mj.id_missao
               INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = mj.id_usuario
               INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = m.id_grupo
@@ -663,7 +664,7 @@ class User {
       $stmt = User::$conn->prepare($sql);
       $stmt->bind_param("ss", $gtoken, $utoken);
       $stmt->execute();
-      $stmt->bind_result($utoken_sql, $mtoken_sql, $nome_jogador, $nome_missao, $prazo);
+      $stmt->bind_result($utoken_sql, $mtoken_sql, $nome_jogador, $nome_missao, $recompensa, $prazo);
       $stmt->store_result();
 
       $date_now = Date("Y-m-d");
@@ -673,12 +674,15 @@ class User {
 
           // Se a missão não tiver expirada
           if ( strtotime($prazo) >= strtotime($date_now) ) {
+
             $notifications["confirmar_missoes"][] = [
               "utoken"	      => $utoken_sql,
               "mtoken"		    => $mtoken_sql,
               "nome_jogador"  => $nome_jogador,
               "nome_missao"	  => $nome_missao,
+              "recompensa"	  => $recompensa,
             ];
+
           }
 
         }
@@ -717,12 +721,6 @@ class User {
     }
 
 
-
-
-		
-		
-
-		
 		return $notifications;
 
   }

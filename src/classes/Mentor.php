@@ -130,7 +130,7 @@ class Mentor extends User {
 			
 			if ( $mission->getCriador() == $this->getId_usuario() ) {
 				
-				if ( $mission->getPrazo() > date("Y-m-d") )
+				if ( strtotime(date("d/m/Y")) > strtotime($mission->getPrazo()) )
 					throw new Exception( set_error("mission_expired", "Não é possível realizar esta ação pois a missão está expirada!"), 403);
 				
 				// CONFIRMA A MISSÃO COMPLETADA E ADICIONA OS PONTOS

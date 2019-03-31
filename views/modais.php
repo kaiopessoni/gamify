@@ -42,3 +42,20 @@
 		<p>Este é o <strong>código único do grupo</strong>, através dele outras pessoas conseguem participar deste grupo caso os moderadores aceitem.</p>
 	</div>
 </div>
+
+<!-- Modal de Confirmar Missão -->
+<div id="modal-confirmar-missao" class="modal middle">
+	<div class="modal-content">
+		<p class="fs-11 center">Arraste e escolha a recompensa!</p>
+		<div class="row valign-wrapper">
+      <div class="col s2 fs-8 center">50</div>
+			<div class="col s8 center">
+        <p class="range-field"><input id="range-recompensa" type="range" min="50" step="50" value="50" /></p>
+      </div>
+      <div id="label-max-recompensa" class="col s2 fs-8 center"></div>
+		</div>
+    <div class="row">
+      <div class="col s12 center"><a id="btn-confirmar-missao" class="btn-flat waves-effect modal-close">Confirmar</a></div>
+    </div>
+	</div>
+</div>

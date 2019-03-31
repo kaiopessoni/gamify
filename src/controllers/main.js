@@ -93,6 +93,9 @@ function confirm() {
     case "excluir-missao":
       excluirMissao(confirm_data);
       break;
+    case "recusar-missao":
+      recusarMissao(confirm_data);
+      break;
     case "participar-grupo":
       participarGrupo(confirm_data);
       break;
@@ -715,6 +718,8 @@ function getNotificacoes() {
       var content = "";
       var notificacoes = data.notificacoes;
 
+      console.log(notificacoes);
+
       // Participar de grupo
       if ( tipo[active_group] == "jogador/moderador" || tipo[active_group] == "mentor/moderador" ) {
         
@@ -777,8 +782,8 @@ function getNotificacoes() {
           $.each(notificacoes.confirmar_missoes, (key, item) => {
 
             settings_confirmar_missoes += " <ul id='notification-mission-dropdown-"+ item.mtoken +"' class='dropdown-content'> \
-                                              <li><a>Confirmar</a></li> \
-                                              <li><a>Rejeitar</a></li> \
+                                              <li><a onclick=\"confirmarMissaoTrigger({'mtoken': '"+ item.mtoken +"', 'utoken': '"+ item.utoken +"', 'recompensa': '"+ item.recompensa +"'})\">Confirmar</a></li> \
+                                              <li><a onclick=\"confirmTrigger('recusar-missao', {'mtoken': '"+ item.mtoken +"', 'utoken': '"+ item.utoken +"'})\">Recusar</a></li> \
                                             </ul>";
 
             content += "<li class='col s12 spc-5'> \

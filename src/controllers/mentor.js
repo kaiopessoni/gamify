@@ -1,4 +1,5 @@
 var mtoken_to_edit;
+var confirm_missao_data;
 
 $(document).ready(() => {
 
@@ -9,6 +10,11 @@ $(document).ready(() => {
   $("#btn-editar-missao").click(() => {
     editarMissao(mtoken_to_edit);
   });
+
+  $("#btn-confirmar-missao").click(() => {
+    confirmarMissao();
+  });
+
 
 });
 
@@ -116,6 +122,70 @@ function excluirMissao(data) {
       toast(data.status, data.message);
 
       if ( data.code == "mission_deleted" )
+        sync()
+
+		},
+		error: () => {
+			toast("Verifique sua conexão com a internet!");
+			loading("close");
+		}
+	});
+
+}
+
+function recusarMissao(data) {
+
+  loading("open");
+		
+	$.ajax({
+		type: "GET",
+		url: "/src/ajax/mentor.php",
+		data: "gtoken=" + active_group + "&mtoken="+ data.mtoken + "&utoken="+ data.utoken +"&action=recusar-missao",
+		success: (data) => {
+
+      loading("close");
+      toast(data.status, data.message);
+
+      if ( data.code == "mission_denied" )
+        sync()
+
+		},
+		error: () => {
+			toast("Verifique sua conexão com a internet!");
+			loading("close");
+		}
+	});
+
+}
+
+function confirmarMissaoTrigger(data) {
+
+  $("#range-recompensa").attr("max", data.recompensa);
+  $("#label-max-recompensa").html(data.recompensa);
+
+  $("#modal-confirmar-missao").modal("open");
+  confirm_missao_data = data;
+
+  console.log(confirm_missao_data);
+
+}
+
+function confirmarMissao() {
+
+  loading("open");
+
+  let data = confirm_missao_data;
+  
+	$.ajax({
+		type: "GET",
+		url: "/src/ajax/mentor.php",
+		data: "gtoken=" + active_group + "&mtoken="+ data.mtoken + "&utoken="+ data.utoken + "&recompensa="+ $("#range-recompensa").val() +"&action=confirmar-missao",
+		success: (data) => {
+
+      loading("close");
+      toast(data.status, data.message);
+
+      if ( data.code == "mission_confirmed" )
         sync()
 
 		},

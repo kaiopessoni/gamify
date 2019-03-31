@@ -118,6 +118,44 @@
 
     break;
 
+    /* Recusa uma missão completada
+  	====================*/
+    case "recusar-missao":
+
+      try {
+
+        $mentor = new Mentor();
+        $mentor->getUser($_SESSION["gm_utoken"]);
+
+        $mentor->respond_player($data["gtoken"], $data["mtoken"], $data["utoken"], "ativa");
+
+        finish("success", "mission_denied", "Missão recusada com sucesso!");
+
+      } catch (Exception $e) {
+				$error = unserialize($e->getMessage());
+				finish("error", $error["type"], $error["info"]);
+			}
+
+    break;
+
+    case "confirmar-missao":
+
+      try {
+
+        $mentor = new Mentor();
+        $mentor->getUser($_SESSION["gm_utoken"]);
+
+        $mentor->respond_player($data["gtoken"], $data["mtoken"], $data["utoken"], "completada", $data["recompensa"]);
+
+        finish("success", "mission_confirmed", "Missão confirmada com sucesso!");
+
+      } catch (Exception $e) {
+				$error = unserialize($e->getMessage());
+				finish("error", $error["type"], $error["info"]);
+			}
+
+    break;
+
 		default:
 			finish("error", "invalid_action", "Ação desconhecida!");
 
