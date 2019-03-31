@@ -527,9 +527,38 @@ class User {
 				
 			}
 			
-		}
-		
-		return $missoes;
+    }
+
+    if ( $tipo == "jogador" || $tipo == "jogador/moderador" ) {
+
+      // Ordena as missões
+      $ordered_missions = [];
+
+      foreach ( $missoes as $mission ) {
+        if ( $mission["status"] == "ativa" )
+          $ordered_missions[] = $mission;
+      }
+
+      foreach ( $missoes as $mission ) {
+        if ( $mission["status"] == "pendente" )
+          $ordered_missions[] = $mission;
+      }
+
+      foreach ( $missoes as $mission ) {
+        if ( $mission["status"] == "completada" )
+          $ordered_missions[] = $mission;
+      }
+
+      foreach ( $missoes as $mission ) {
+        if ( $mission["status"] == "expirada" )
+          $ordered_missions[] = $mission;
+      }
+      
+      return $ordered_missions;
+
+    } else return $missoes;
+    
+    
 		
 	}
 	
@@ -805,7 +834,7 @@ try {
 
   // echo "<pre>";
   // finish("success", "notifications_received", "Notificações recebida com scesso!", $notifications, "notificacoes");
-  // // echo json_encode($user->getNotifications("CD6C14D0"), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+  // echo json_encode($user->getMissions("CD6C14D0"), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
   // echo "</pre>";
 
   // $user->exit_group("CD6C14D0");
