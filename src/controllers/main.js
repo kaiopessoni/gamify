@@ -96,6 +96,9 @@ function confirm() {
     case "participar-grupo":
       participarGrupo(confirm_data);
       break;
+    case "desbloquear-usuario":
+      desbloquearUsuario(confirm_data);
+      break;
     }
   
   change_confirm_question(); // Volta a pergunta padrão
@@ -316,12 +319,14 @@ function getGrupos() {
             
             $.each(grupo.bloqueados, (key, bloqueado) => {
 
-              lista_bloqueados += '	<li class="col s12 spc-3"> \
-                                      <div class="row valign-wrapper"> \
-                                        <div class="col s8 truncate">'+ bloqueado.nome +'</div> \
-                                        <div class="col s4"><span class="valign-wrapper right fs-9">Desbloquear&nbsp;<i class="material-icons fs-12">block</i></span></div> \
+              lista_bloqueados += "	<li class='col s12 spc-3'> \
+                                      <div class='row valign-wrapper'> \
+                                        <div class='col s8 truncate'>"+ bloqueado.nome +"</div> \
+                                        <div class='col s4'> \
+                                          <span class='valign-wrapper right fs-9' onclick=\"confirmTrigger('desbloquear-usuario', {'gtoken': '"+  bloqueado.gtoken +"', 'utoken': '"+ bloqueado.utoken +"'})\" >Desbloquear&nbsp;<i class='material-icons fs-12'>block</i></span> \
+                                        </div> \
                                       </div> \
-                                    </li>';
+                                    </li>";
             });
                                         
             lista_bloqueados += '			</ul> \

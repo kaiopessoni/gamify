@@ -145,3 +145,33 @@ function participarGrupo(data) {
 		}
 	});
 }
+
+function desbloquearUsuario(data) {
+
+  loading("open");
+
+  let gtoken = data.gtoken;
+		
+	$.ajax({
+		type: "GET",
+		url: "/src/ajax/mod.php",
+		data: "gtoken="+ gtoken +"&utoken="+ data.utoken +"&action=desbloquear-usuario",
+		success: (data) => {
+
+      loading("close");
+      toast(data.status, data.message);
+
+      if ( data.code == "user_unblocked" ) {
+        sync();
+        setTimeout(() => {
+          showPage("#info-grupo-" + gtoken);
+        }, 1000);
+      }
+
+		},
+		error: () => {
+			toast("Verifique sua conexão com a internet!");
+			loading("close");
+		}
+	});
+}

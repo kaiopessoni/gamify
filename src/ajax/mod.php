@@ -159,7 +159,7 @@
 			
 		break;
 
-    /* Muda o tipo do participante do grupo
+    /* Aceita/Recusa solicitações para entrar no grupo
   	====================*/
 		case "participar-grupo":
     
@@ -190,6 +190,26 @@
         }
 
         finish("success", "status_updated", $message);
+        
+      } catch (Exception $e) {
+        $error = unserialize($e->getMessage());
+        finish("error", $error["type"], $error["info"]);
+      }
+      
+    break;
+
+    /* Desbloqueia usuário
+  	====================*/
+		case "desbloquear-usuario":
+    
+      try {
+
+        $mod = new Moderator();
+        $mod->getUser($_SESSION["gm_utoken"]);
+        
+        $mod->change_status_of_user($data["utoken"], $data["gtoken"], "desbloqueado");
+
+        finish("success", "user_unblocked", "Usuário desbloqueado com sucesso!");
         
       } catch (Exception $e) {
         $error = unserialize($e->getMessage());
