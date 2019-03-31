@@ -499,7 +499,7 @@ class User {
           $stmt2->store_result();
           $stmt2->fetch();
 
-					if ( date("Y-m-d") > $prazo && $status != "completada" )
+					if ( strtotime(date("Y-m-d")) > strtotime($prazo) && $status != "completada" )
 						$status = "expirada";
           else if ( $status != "pendente" && $status != "completada" )
             $status = "ativa";
@@ -509,7 +509,6 @@ class User {
 					$recompensa_final = "";
         }
 					
-				
 				$prazo 			= date('d-m-Y', strtotime($prazo));
 				$prazo 			= str_replace('-', '/', $prazo);
 				
@@ -653,7 +652,7 @@ class User {
 
     if ( $tipo == "mentor" || $tipo == "mentor/moderador" ) {
 
-      $sql = "SELECT utoken, mtoken, u.nome, m.nome FROM ". TABLE_MISSOES_JOGADORES ." mj
+      $sql = "SELECT utoken, mtoken, u.nome, m.nome, prazo FROM ". TABLE_MISSOES_JOGADORES ." mj
               INNER JOIN ". TABLE_MISSOES ." m ON m.id_missao = mj.id_missao
               INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = mj.id_usuario
               INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = m.id_grupo
@@ -664,18 +663,23 @@ class User {
       $stmt = User::$conn->prepare($sql);
       $stmt->bind_param("ss", $gtoken, $utoken);
       $stmt->execute();
-      $stmt->bind_result($utoken_sql, $mtoken_sql, $nome_jogador, $nome_missao);
+      $stmt->bind_result($utoken_sql, $mtoken_sql, $nome_jogador, $nome_missao, $prazo);
       $stmt->store_result();
+
+      $date_now = Date("Y-m-d");
 
       if ( $stmt->num_rows > 0 ) {
         while ( $stmt->fetch() ) {
 
-          $notifications["confirmar_missoes"][] = [
-            "utoken"	      => $utoken_sql,
-            "mtoken"		    => $mtoken_sql,
-            "nome_jogador"  => $nome_jogador,
-            "nome_missao"	  => $nome_missao,
-          ];
+          // Se a missão não tiver expirada
+          if ( strtotime($prazo) >= strtotime($date_now) ) {
+            $notifications["confirmar_missoes"][] = [
+              "utoken"	      => $utoken_sql,
+              "mtoken"		    => $mtoken_sql,
+              "nome_jogador"  => $nome_jogador,
+              "nome_missao"	  => $nome_missao,
+            ];
+          }
 
         }
       }

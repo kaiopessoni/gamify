@@ -40,9 +40,11 @@ class Player extends User {
 		if ( $type == "jogador" || $type == "jogador/moderador" ) {
 			
 			$mission = new Mission();
-			$mission->getMission($mtoken);
+      $mission->getMission($mtoken);
+      
+      $date_now = date("d/m/Y");
 			
-			if ( date("Y-m-d") > $mission->getPrazo() )
+			if ( strtotime($date_now) >= strtotime($mission->getPrazo()) )
 					throw new Exception( set_error("mission_expired", "Não é possível realizar esta ação pois a missão está expirada!"), 403);
 			
 			$id_usuario = $this->getId_usuario();
