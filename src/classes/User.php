@@ -547,7 +547,8 @@ class User {
 						INNER JOIN ". TABLE_GRUPOS_USUARIOS ." gu
 							ON u.id_usuario = gu.id_usuario
 						WHERE 
-							(tipo = 'jogador' OR tipo = 'jogador/moderador') AND gu.status = 'participando' AND u.ativo = 'sim' AND id_grupo = ?;";
+              (tipo = 'jogador' OR tipo = 'jogador/moderador') AND gu.status = 'participando' AND u.ativo = 'sim' AND id_grupo = ?
+            ORDER BY pontos DESC;";
 		
 		$stmt = User::$conn->prepare($sql);
 		$stmt->bind_param("i", $id_grupo);
@@ -597,7 +598,8 @@ class User {
       $sql = "SELECT utoken, gtoken, u.nome, g.nome FROM ". TABLE_GRUPOS_USUARIOS ." gu
               INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = gu.id_usuario
               INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = gu.id_grupo
-              WHERE g.ativo = 'sim' AND gtoken = ? AND gu.status = 'pendente';";
+              WHERE g.ativo = 'sim' AND gtoken = ? AND gu.status = 'pendente'
+              ORDER BY id_grupos_usuarios ASC;";
       
       $stmt = User::$conn->prepare($sql);
       $stmt->bind_param("s", $gtoken);
@@ -627,7 +629,8 @@ class User {
               INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = mj.id_usuario
               INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = m.id_grupo
               WHERE g.ativo = 'sim' AND mj.status = 'pendente' AND gtoken = ?
-              AND m.id_usuario = (SELECT id_usuario FROM ". TABLE_USUARIOS ." WHERE utoken = ?);";
+              AND m.id_usuario = (SELECT id_usuario FROM ". TABLE_USUARIOS ." WHERE utoken = ?)
+              ORDER BY id_missoes_jogadores;";
       
       $stmt = User::$conn->prepare($sql);
       $stmt->bind_param("ss", $gtoken, $utoken);
@@ -657,7 +660,8 @@ class User {
               INNER JOIN ". TABLE_USUARIOS ." u ON u.id_usuario = m.id_usuario
               INNER JOIN ". TABLE_GRUPOS ." g ON g.id_grupo = m.id_grupo
               WHERE g.ativo = 'sim' AND mj.status = 'completada' AND gtoken = ?
-              AND mj.id_usuario = (SELECT id_usuario FROM ". TABLE_USUARIOS ." WHERE utoken = ?);";
+              AND mj.id_usuario = (SELECT id_usuario FROM ". TABLE_USUARIOS ." WHERE utoken = ?)
+              ORDER BY id_missoes_jogadores ASC;";
       
       $stmt = User::$conn->prepare($sql);
       $stmt->bind_param("ss", $gtoken, $utoken);

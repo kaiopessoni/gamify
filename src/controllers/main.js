@@ -340,7 +340,7 @@ function getGrupos() {
                                       <div class="divider"></div> \
                                     </div> \
                                     <div class="col s12"> \
-                                      <p class="center">Nenhum usuário foi bloqueado!</p> \
+                                      <p class="center grey-text text-darken-1">Nenhum usuário foi bloqueado!</p> \
                                     </div> \
                                   </div>';
           }
@@ -437,9 +437,10 @@ function getMissoes() {
             
             let hide_action = (missao.status == "ativa") ? "" : "hide";
             let col_desc    = (missao.status == "ativa") ? "s4" : "s7";
+            let spc13    = (key == 0) ? "" : "spc-13";
 
 						// Jogador
-						lista_missoes += "<li class='col s12 border-bottom spc-13'> \
+						lista_missoes += "<li class='col s12 border-bottom "+ spc13 +"'> \
                                 <div class='row valign-wrapper'> \
                                   <div class='col s9 truncate bold'>"+ missao.nome +"</div> \
                                   <div class='col s3 right-align'> \
