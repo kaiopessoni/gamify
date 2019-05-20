@@ -4,7 +4,6 @@
 	</div>
 	<li><a onclick="showPage('#editar-perfil')">Editar Perfil</a></li>
 	<li><a onclick="sync(true)">Sincronizar</a></li>
-	<li><a onclick="showPage('#ajuda')">Ajuda</a></li>
 	<li><a onclick="showPage('#sobre')">Sobre</a></li>
 	<li><a href="/views/login/logout.php">Sair</a></li>
 </ul>

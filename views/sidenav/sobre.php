@@ -16,7 +16,6 @@
 					<img src="assets/images/logo/logo%20wide.png" width="180" alt="logo-gamify"><br>
 					<span class="grey-text text-darken-1">Versão 1.0.0</span>
 				</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil quo eum aut! Unde reprehenderit cupiditate magni hic neque repudiandae eos libero aliquam fugit ipsa ipsam, voluptates esse quod ratione. Inventore?</p>
 			</div>
 		</div>
 		

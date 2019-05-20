@@ -8,10 +8,12 @@
 	require_once "../classes/User.php";
 	require_once "../classes/Group.php";
 	require_once "../classes/Mentor.php";
-	require_once "../classes/Mission.php";
-	session_start();
-	
-	set_time_limit(300);
+  require_once "../classes/Mission.php";
+  
+	session_save_path($_SERVER["DOCUMENT_ROOT"] . '/session');
+  
+	if  (session_status() == PHP_SESSION_NONE )
+    session_start();
 
 	/* Recebimento dos dados
   ========================================*/

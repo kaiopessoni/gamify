@@ -1,8 +1,8 @@
 <?php
 
-//	session_save_path($_SERVER["DOCUMENT_ROOT"] . '/session');
-//
-//	if  (session_status() == PHP_SESSION_NONE )
+  session_save_path($_SERVER["DOCUMENT_ROOT"] . '/session');
+  
+	if  (session_status() == PHP_SESSION_NONE )
     session_start();
 
 	if ( !isset($_SESSION["gm_user_active"]) )
